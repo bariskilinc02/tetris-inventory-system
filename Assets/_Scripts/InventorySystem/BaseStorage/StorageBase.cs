@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class StorageBase : MonoBehaviour
 {
-    public Vector2Int TileSize;
+
 
     public Transform TargetTileMap;
     public Transform TargetItemSlots;
 
+    public Vector2Int TileSize;
     public List<ItemBase> Items;
     public List<TileSlot> ItemSlots;
 
@@ -40,6 +41,15 @@ public class StorageBase : MonoBehaviour
         AddItem_Auto("chest");
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            AddItem_Auto("glock17");
+        }
+       
+    }
+
     #region Set Init
     private void SetTileSlots()
     {
@@ -67,6 +77,8 @@ public class StorageBase : MonoBehaviour
         }
     }
     #endregion
+
+    #region Controls 
     public Vector2Int FindEmptyTileArea(Vector2Int itemSize)
     {
         Vector2Int tempCoordinate = new Vector2Int();
@@ -109,6 +121,7 @@ public class StorageBase : MonoBehaviour
 
         return isEmpty;
     }
+    #endregion
 
     #region Create Item
     public ItemBase CreateNewItem(string id)
@@ -151,6 +164,7 @@ public class StorageBase : MonoBehaviour
         ItemBase item = CreateNewItem(id);
 
         Vector2Int toCoordinate = FindEmptyTileArea(item.Size);
+
         if (toCoordinate != new Vector2Int(-1, -1))
         {
             AddItem_ToCoordinate(item, toCoordinate);
@@ -191,10 +205,7 @@ public class StorageBase : MonoBehaviour
         }
     }
 
-    public void SetItemsSlotSprite(ItemSlot itemSlot)
-    {
-        itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = itemSlot.AssignedItem.Sprite;
-    }
+  
     #endregion
 
     #region Remove Item
@@ -206,11 +217,21 @@ public class StorageBase : MonoBehaviour
         }
         itemSlot.ConnectedTileSlots.Clear();
         itemSlot.ConnectedStorage.Items.Remove(itemSlot.ConnectedStorage.Items.Find(x => x == itemSlot.AssignedItem));
-        
     }
     #endregion
 
     #region UI Configuration
+    public void SetItemsSlotSprite(ItemSlot itemSlot)
+    {
+        itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = itemSlot.AssignedItem.Sprite;
+    }
+
+    /// <summary>
+    /// Finds item slot at coordinate with given size and checks if the fill is empty
+    /// </summary>
+    /// <param name="itemSize"></param>
+    /// <param name="coordinate"></param>
+    /// <param name="isMovable"></param>
     public void UpdateTileSlotHighlight(Vector2Int itemSize, Vector2Int coordinate, bool isMovable)
     {
         Vector2Int pivotPosition = coordinate;
@@ -237,5 +258,6 @@ public class StorageBase : MonoBehaviour
         }
     }
     #endregion
+
 
 }

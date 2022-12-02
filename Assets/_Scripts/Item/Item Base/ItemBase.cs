@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/Level", order = 1)]
-public class ItemBase: ScriptableObject
+public class ItemBase: ScriptableObject, IConstructor<ItemBase>
 {
     public string Name;
     public string Id;
@@ -19,6 +19,16 @@ public class ItemBase: ScriptableObject
 
     public float ItemWeight;
     public float TotalWeight;
+
+    public ItemBase Construct()
+    {
+        return new ItemBase();
+    }
+
+    public ItemBase Construct(string id)
+    {
+        return new ItemBase(id);
+    }
 
     public ItemBase()
     {

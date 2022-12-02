@@ -8,8 +8,6 @@ public class Controller : MonoBehaviour
 {
     public static Controller Instance;
 
-    public ItemBase newItem;
-
     private TileSlot _currentSlot;
     public ItemSlot CurrentMovingItem;
 
@@ -28,8 +26,6 @@ public class Controller : MonoBehaviour
 
     void Start()
     {
-        newItem = new ItemBase("akm");
-
         m_EventSystem = EventSystem.current;
         m_Raycaster = FindObjectOfType<GraphicRaycaster>();
         m_PointerEventData = new PointerEventData(m_EventSystem);
@@ -58,16 +54,14 @@ public class Controller : MonoBehaviour
     #region Mouse Commands
     private void IsMouseOnSlot()
     {
-        List<RaycastResult> results = new List<RaycastResult>();
-
-        m_PointerEventData.position = Input.mousePosition;
-        m_Raycaster.Raycast(m_PointerEventData, results);
+        List<RaycastResult> results  = SendRay();
 
         if (results.Count > 0)
         {
             if (results[0].gameObject.CompareTag("TileSlot"))
             {
                 _currentSlot = results[0].gameObject.GetComponent<TileSlot>();
+
                 isAreaEmpty =_currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats);
 
                 if(isAreaEmpty) _currentSlot.ConnectedStorage.UpdateTileSlotHighlight(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats, true);
@@ -85,10 +79,7 @@ public class Controller : MonoBehaviour
     {
         if (!Input.GetMouseButtonDown(0) && !isItemMoving) return;
 
-        List<RaycastResult> results = new List<RaycastResult>();
-
-        m_PointerEventData.position = Input.mousePosition;
-        m_Raycaster.Raycast(m_PointerEventData, results);
+        List<RaycastResult> results = SendRay();
 
         if (results.Count > 0)
         {
@@ -115,10 +106,7 @@ public class Controller : MonoBehaviour
     {
         if (!Input.GetMouseButtonUp(0) || !isItemMoving) return;
 
-        List<RaycastResult> results = new List<RaycastResult>();
-
-        m_PointerEventData.position = Input.mousePosition;
-        m_Raycaster.Raycast(m_PointerEventData, results);
+        List<RaycastResult> results = SendRay();
 
         if (results.Count > 0)
         {
@@ -139,6 +127,8 @@ public class Controller : MonoBehaviour
                 }
                 else
                 {
+                    SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot);
+
                     CurrentMovingItem.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot);
                     CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
                     isItemMoving = false;
@@ -146,6 +136,8 @@ public class Controller : MonoBehaviour
             }
             else
             {
+                SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot);
+
                 CurrentMovingItem.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot);
                 CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
                 isItemMoving = false;
@@ -196,6 +188,14 @@ public class Controller : MonoBehaviour
         currentSlot.ConnectedStorage.Items.Add(item);
     }
 
+    private List<RaycastResult> SendRay()
+    {
+        List<RaycastResult> results = new List<RaycastResult>();
 
+        m_PointerEventData.position = Input.mousePosition;
+        m_Raycaster.Raycast(m_PointerEventData, results);
+
+        return results;
+    }
 
 }
