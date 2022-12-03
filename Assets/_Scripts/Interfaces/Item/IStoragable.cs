@@ -5,5 +5,5 @@ using UnityEngine;
 public interface IStoragable
 {
     public Vector2Int TileSize { get; set; }
-    public List<ItemBase> SubItems { get; set; }
+    public List<ItemBase> Items { get; set; }
 }

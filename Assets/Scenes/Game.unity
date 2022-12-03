@@ -578,10 +578,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95530a7104a795041a8f7a6469499739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetTileMap: {fileID: 0}
+  TargetTileMap: {fileID: 1062825700}
   TargetItemSlots: {fileID: 5489896}
-  TileSize: {x: 10, y: 3}
-  Items: []
+  Storage:
+    _tileSize: {x: 0, y: 0}
+    _items: []
+  _tileSize: {x: 10, y: 3}
+  _items: []
   TileSlots: []
   Tiles: []
   _isConnectedToTarget: 0
@@ -6512,8 +6515,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetTileMap: {fileID: 1685595575}
   TargetItemSlots: {fileID: 758603781}
-  TileSize: {x: 4, y: 5}
-  Items: []
+  Storage:
+    _tileSize: {x: 0, y: 0}
+    _items: []
+  _tileSize: {x: 4, y: 5}
+  _items: []
   TileSlots: []
   Tiles: []
   _isConnectedToTarget: 0

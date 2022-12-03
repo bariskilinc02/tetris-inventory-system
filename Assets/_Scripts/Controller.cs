@@ -116,7 +116,7 @@ public class Controller : MonoBehaviour
 
                 if (_currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
                 {
-                    SetItemToEmptyArea(CurrentMovingItem.AssignedItem, _currentSlot);
+                    _currentSlot.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, _currentSlot.ConnectedTile);
 
                     _currentSlot.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, _currentSlot.ConnectedTile);
                     _currentSlot.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, _currentSlot.Coordinats);
@@ -127,7 +127,7 @@ public class Controller : MonoBehaviour
                 }
                 else
                 {
-                    SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot.TileSlot);
+                    CurrentMovingItem.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot);
 
                     CurrentMovingItem.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot);
                     CurrentMovingItem.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot.TileSlot.Coordinats);
@@ -138,7 +138,7 @@ public class Controller : MonoBehaviour
             }
             else
             {
-                SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot.TileSlot);   
+                CurrentMovingItem.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot);   
 
                 CurrentMovingItem.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot);
                 CurrentMovingItem.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot.TileSlot.Coordinats);
@@ -149,48 +149,6 @@ public class Controller : MonoBehaviour
         }
     }
     #endregion
-
-    private bool IsTileAreaEmptyForItem(ItemBase item, TileSlot currentSlot)
-    {
-        Vector2Int pivotPosition = currentSlot.Coordinats;
-
-        bool isEmpty = true;
-
-        for (int i = 0; i < item.Size.x; i++)
-        {
-            for (int l = 0; l < item.Size.y; l++)
-            {
-                TileSlot slot = currentSlot.ConnectedStorage.TileSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
-                if (slot == null)
-                {
-                    isEmpty = false;
-                    return isEmpty;
-                }
-                else if(slot.AssignedItem != null)
-                {
-                    isEmpty = false;
-                    return isEmpty;
-                }
-            }
-        }
-
-        return isEmpty;
-    }
-    private void SetItemToEmptyArea(ItemBase item, TileSlot currentSlot)
-    {
-        Vector2Int pivotPosition = currentSlot.Coordinats;
-
-        for (int i = 0; i < item.Size.x; i++)
-        {
-            for (int l = 0; l < item.Size.y; l++)
-            {
-                Tile tile = currentSlot.ConnectedStorage.Tiles.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
-                tile.AssignedItem = item;
-            }
-        }
-
-        currentSlot.ConnectedStorage.Items.Add(item);
-    }
 
     private List<RaycastResult> SendRay()
     {

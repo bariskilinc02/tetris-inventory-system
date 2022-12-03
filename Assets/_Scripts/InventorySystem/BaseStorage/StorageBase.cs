@@ -3,15 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StorageBase : MonoBehaviour
+public class StorageBase : MonoBehaviour, IStoragable
 {
 
 
     public Transform TargetTileMap;
     public Transform TargetItemSlots;
 
-    public Vector2Int TileSize;
-    public List<ItemBase> Items;
+    public Storage Storage;
+
+    [SerializeField] private Vector2Int _tileSize;
+    [SerializeField] private List<ItemBase> _items;
+
+    public Vector2Int TileSize
+    {
+        get => _tileSize;
+        set => _tileSize = value;
+    }
+
+    public List<ItemBase> Items
+    {
+        get => _items;
+        set => _items = value;
+    }
+    //public Vector2Int TileSize;
+    //public List<ItemBase> Items;
     public List<TileSlot> TileSlots;
     public List<Tile> Tiles;
 
@@ -274,6 +290,7 @@ public class StorageBase : MonoBehaviour
 
     }
 
+    
     public void SynchTileSlotsInItemSlot(ItemSlot itemSlot, Vector2Int coordinate)
     {
         for (int i = 0; i < itemSlot.AssignedItem.Size.x; i++)
@@ -307,6 +324,21 @@ public class StorageBase : MonoBehaviour
         itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = itemSlot.AssignedItem.Sprite;
     }
 
+    public void SetItemToEmptyArea(ItemBase item, Tile currentSlot)
+    {
+        Vector2Int pivotPosition = currentSlot.Coordinats;
+
+        for (int i = 0; i < item.Size.x; i++)
+        {
+            for (int l = 0; l < item.Size.y; l++)
+            {
+                Tile tile = currentSlot.ConnectedStorage.Tiles.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+                tile.AssignedItem = item;
+            }
+        }
+
+        currentSlot.ConnectedStorage.Items.Add(item);
+    }
     /// <summary>
     /// Finds item slot at coordinate with given size and checks if the fill is empty
     /// </summary>
