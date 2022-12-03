@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class TileSlot : MonoBehaviour
 {
+    public Tile ConnectedTile;
     public StorageBase ConnectedStorage;
     public ItemBase AssignedItem;
     public Vector2Int Coordinats;
@@ -16,6 +17,12 @@ public class TileSlot : MonoBehaviour
     {
         ConnectedStorage = storageBase;
     }
+
+    public void SetConnectWithTiles()
+    {
+        ConnectedTile = ConnectedStorage.Tiles.Find(x => x.Coordinats == Coordinats);
+    }
+
     private void Awake()
     {
         Image = GetComponent<Image>();
@@ -26,11 +33,6 @@ public class TileSlot : MonoBehaviour
         if (isHighLight) UpdateColor(Color.green);
         else if (isRedLight) UpdateColor(Color.red);
         else UpdateColor(Color.black);
-    }
-
-    private void LateUpdate()
-    {
-        //isHighLight = false;
     }
 
     private void UpdateColor(Color color)

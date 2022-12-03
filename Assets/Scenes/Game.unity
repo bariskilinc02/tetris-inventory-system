@@ -544,7 +544,6 @@ GameObject:
   m_Component:
   - component: {fileID: 166296004}
   - component: {fileID: 166296005}
-  - component: {fileID: 166296006}
   m_Layer: 0
   m_Name: Inventory
   m_TagString: Untagged
@@ -579,30 +578,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95530a7104a795041a8f7a6469499739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetTileMap: {fileID: 1062825700}
+  TargetTileMap: {fileID: 0}
   TargetItemSlots: {fileID: 5489896}
   TileSize: {x: 10, y: 3}
   Items: []
-  ItemSlots: []
-  ItemSlotPrefab: {fileID: 5790091416435712972, guid: d002a06244b9ea64e9f3aaaf9a7149f6,
-    type: 3}
---- !u!114 &166296006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 166296003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95530a7104a795041a8f7a6469499739, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetTileMap: {fileID: 1685595575}
-  TargetItemSlots: {fileID: 758603781}
-  TileSize: {x: 4, y: 5}
-  Items: []
-  ItemSlots: []
+  TileSlots: []
+  Tiles: []
+  _isConnectedToTarget: 0
+  _isStorageUIUpdated: 0
   ItemSlotPrefab: {fileID: 5790091416435712972, guid: d002a06244b9ea64e9f3aaaf9a7149f6,
     type: 3}
 --- !u!1001 &172293976
@@ -2288,7 +2271,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b09d3c6c2909a1543a1edea8abbef5e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StorageItem: {fileID: 0}
   ItemBase: {fileID: 0}
 --- !u!4 &669227215
 Transform:
@@ -3632,7 +3614,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1911829668}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1041950189
 MonoBehaviour:
@@ -6484,6 +6466,60 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!1 &1693856516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1693856517}
+  - component: {fileID: 1693856518}
+  m_Layer: 0
+  m_Name: Storage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1693856517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693856516}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1911829668}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1693856518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693856516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95530a7104a795041a8f7a6469499739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetTileMap: {fileID: 1685595575}
+  TargetItemSlots: {fileID: 758603781}
+  TileSize: {x: 4, y: 5}
+  Items: []
+  TileSlots: []
+  Tiles: []
+  _isConnectedToTarget: 0
+  _isStorageUIUpdated: 0
+  ItemSlotPrefab: {fileID: 5790091416435712972, guid: d002a06244b9ea64e9f3aaaf9a7149f6,
+    type: 3}
 --- !u!1 &1725999152
 GameObject:
   m_ObjectHideFlags: 0
@@ -7075,6 +7111,7 @@ Transform:
   m_Children:
   - {fileID: 1072264512}
   - {fileID: 166296004}
+  - {fileID: 1693856517}
   - {fileID: 1041950188}
   m_Father: {fileID: 0}
   m_RootOrder: 0

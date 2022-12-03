@@ -12,20 +12,23 @@ public class StorageBase : MonoBehaviour
 
     public Vector2Int TileSize;
     public List<ItemBase> Items;
-    public List<TileSlot> ItemSlots;
+    public List<TileSlot> TileSlots;
+    public List<Tile> Tiles;
 
-    private bool _isConnectedToTarget;
+    [SerializeField]private bool _isConnectedToTarget;
+    [SerializeField] private bool _isStorageUIUpdated;
 
     public GameObject ItemSlotPrefab;
 
     void Init()
     {
+        ConnectSelf();
+
         _isConnectedToTarget = TargetTileMap == null ? false : true;
 
         if (_isConnectedToTarget)
         {
-            SetTileSlots();
-            SetTileSlotCoordinates();
+            ConnectToInventoryPage();
         }
     }
 
@@ -47,45 +50,103 @@ public class StorageBase : MonoBehaviour
         {
             AddItem_Auto("glock17");
         }
-       
+
+        if (_isConnectedToTarget == false)
+        {
+            if (TargetTileMap != null)
+            {
+                ConnectToInventoryPage();
+                RefreshInventoryPage();
+                _isConnectedToTarget = true;
+            }
+        }
     }
 
     #region Set Init
     private void SetTileSlots()
     {
-        ItemSlots.Clear();
+        TileSlots.Clear();
 
         for (int i = 0; i < TargetTileMap.childCount; i++)
         {
             TileSlot tileSlot = TargetTileMap.GetChild(i).GetComponent<TileSlot>();
 
             tileSlot.SetConnectedStorage(this);
-            ItemSlots.Add(tileSlot);
+            TileSlots.Add(tileSlot);
         }
     }
 
+    private void SetConnectTileSlotsToTiles()
+    {
+        for (int i = 0; i < TileSlots.Count; i++)
+        {
+            TileSlot tileSlot = TileSlots[i];
+
+            tileSlot.SetConnectWithTiles();
+        }
+    }
     public void SetTileSlotCoordinates()
     {
         int counter = 0;
-        for (int i = 0; i < ItemSlots.Count / TileSize.x; i++)
+        for (int i = 0; i < TileSlots.Count / TileSize.x; i++)
         {
-            for (int l = 0; l < ItemSlots.Count / TileSize.y; l++)
+            for (int l = 0; l < TileSlots.Count / TileSize.y; l++)
             {
-                ItemSlots[counter].Coordinats = new Vector2Int(l, i);
+                TileSlots[counter].Coordinats = new Vector2Int(l, i);
                 counter += 1;
             }
         }
     }
     #endregion
 
+    #region Set Init Tile
+    private void SetTiles()
+    {
+        Tiles.Clear();
+
+        for (int i = 0; i < TileSize.x * TileSize.y; i++)
+        {
+            Tile tile = new Tile();
+
+            tile.SetConnectedStorage(this);
+            Tiles.Add(tile);
+        }
+    }
+
+    public void SetTileCoordinates()
+    {
+        int counter = 0;
+        for (int i = 0; i < Tiles.Count / TileSize.x; i++)
+        {
+            for (int l = 0; l < Tiles.Count / TileSize.y; l++)
+            {
+                Tiles[counter].Coordinats = new Vector2Int(l, i);
+                counter += 1;
+            }
+        }
+    }
+
+    public void ConnectTileSlotsToTiles()
+    {
+        for (int i = 0; i < TileSize.x * TileSize.y; i++)
+        {
+            Tiles[i].TileSlot = TileSlots[i];
+        }
+    }
+    #endregion
+
     #region Controls 
+
+    /// <summary>
+    /// Finds first empty area with given size and if is exist return coordinates
+    /// </summary>
     public Vector2Int FindEmptyTileArea(Vector2Int itemSize)
     {
         Vector2Int tempCoordinate = new Vector2Int();
 
-        for (int a = 0; a < ItemSlots.Count; a++)
+        for (int a = 0; a < Tiles.Count; a++)
         {
-            tempCoordinate = ItemSlots[a].Coordinats;
+            tempCoordinate = Tiles[a].Coordinats;
 
             if (IsTileAreaEmpty(itemSize, tempCoordinate))
             {
@@ -95,6 +156,11 @@ public class StorageBase : MonoBehaviour
 
         return new Vector2Int(-1, -1);
     }
+
+    /// <summary>
+    /// Determine if given coordinates are empty and return boolean
+    /// </summary>
+    /// <returns></returns>
     public bool IsTileAreaEmpty(Vector2Int itemSize, Vector2Int coordinate)
     {
         Vector2Int pivotPosition = coordinate;
@@ -105,7 +171,7 @@ public class StorageBase : MonoBehaviour
         {
             for (int l = 0; l < itemSize.y; l++)
             {
-                TileSlot slot = ItemSlots.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l);
+                Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l);
                 if (slot == null)
                 {
                     isEmpty = false;
@@ -123,10 +189,18 @@ public class StorageBase : MonoBehaviour
     }
     #endregion
 
-    #region Create Item
+    #region Create
     public ItemBase CreateNewItem(string id)
     {
-        return new ItemBase(id);
+        return Instantiate(ItemDataBase.Instance.Items.Find(x => x.Id == id));
+    }
+    
+    public void CreateItemSlot(ItemBase item)
+    {
+        ItemSlot itemSlot = CreateItemSlot(item.Id, item.Coordinat);
+
+        SetItemsSlotSprite(itemSlot);
+        SynchTileSlotsInItemSlot(itemSlot, item.Coordinat);
     }
     #endregion
 
@@ -136,24 +210,26 @@ public class StorageBase : MonoBehaviour
         GameObject newItemPrefab = Instantiate(ItemSlotPrefab, TargetItemSlots);
         ItemSlot newItemSlot = newItemPrefab.GetComponent<ItemSlot>();
 
-        TileSlot tileSlot = ItemSlots.Find(x => x.Coordinats.x == toCoordinate.x && x.Coordinats.y == toCoordinate.y);
+        Tile tile = Tiles.Find(x => x.Coordinats.x == toCoordinate.x && x.Coordinats.y == toCoordinate.y);
 
-        newItemSlot.PivotTileSlot = tileSlot;
-        newItemSlot.AssignedItem = tileSlot.AssignedItem;
-        newItemSlot.ConnectedStorage = tileSlot.ConnectedStorage;
+        newItemSlot.PivotTileSlot = tile;
+        newItemSlot.AssignedItem = tile.AssignedItem;
+        newItemSlot.AssignedItem.Coordinat = tile.Coordinats;
+        newItemSlot.ConnectedStorage = tile.ConnectedStorage;
 
-        newItemPrefab.transform.position = tileSlot.transform.GetChild(0).position;
+        newItemPrefab.transform.position = tile.TileSlot.transform.GetChild(0).position;
         newItemPrefab.GetComponent<RectTransform>().sizeDelta = new Vector2(100 * newItemSlot.AssignedItem.Size.x, 100 * newItemSlot.AssignedItem.Size.y);
 
         return newItemSlot;
 
     }
 
-    public void ReplaceItemSlot(ItemSlot itemSlot, TileSlot tileSlot)
+    public void ReplaceItemSlot(ItemSlot itemSlot, Tile tileSlot)
     {
 
         itemSlot.PivotTileSlot = tileSlot;
-        itemSlot.transform.position = tileSlot.transform.GetChild(0).position;
+        itemSlot.AssignedItem.Coordinat = tileSlot.Coordinats;
+        itemSlot.transform.position = tileSlot.TileSlot.transform.GetChild(0).position;
         itemSlot.ConnectedStorage = tileSlot.ConnectedStorage;
     }
     #endregion
@@ -168,11 +244,16 @@ public class StorageBase : MonoBehaviour
         if (toCoordinate != new Vector2Int(-1, -1))
         {
             AddItem_ToCoordinate(item, toCoordinate);
+            item.Coordinat = toCoordinate;
 
-            ItemSlot itemSlot = CreateItemSlot(id ,toCoordinate);
-            SetItemsSlotSprite(itemSlot);
+            if (_isConnectedToTarget)
+            {
+                ItemSlot itemSlot = CreateItemSlot(id, toCoordinate);
+                SetItemsSlotSprite(itemSlot);
 
-            SynchTileSlotsInItemSlot(itemSlot, toCoordinate);
+                SynchTileSlotsInItemSlot(itemSlot, toCoordinate);
+            }
+
         }
     }
 
@@ -184,13 +265,13 @@ public class StorageBase : MonoBehaviour
         {
             for (int l = 0; l < item.Size.y; l++)
             {
-                TileSlot slot = ItemSlots.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+                Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
                 slot.AssignedItem = item;
             }
         }
 
-        ItemSlots.Find(x => x.Coordinats.x == coordinate.x && x.Coordinats.y == coordinate.y).ConnectedStorage.Items.Add(item);
-        //currentSlot.ConnectedStorage.Items.Add(item);
+        Tiles.Find(x => x.Coordinats.x == coordinate.x && x.Coordinats.y == coordinate.y).ConnectedStorage.Items.Add(item);
+
     }
 
     public void SynchTileSlotsInItemSlot(ItemSlot itemSlot, Vector2Int coordinate)
@@ -199,7 +280,7 @@ public class StorageBase : MonoBehaviour
         {
             for (int l = 0; l < itemSlot.AssignedItem.Size.y; l++)
             {
-                TileSlot slot = ItemSlots.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+                Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
                 itemSlot.ConnectedTileSlots.Add(slot);
             }
         }
@@ -240,16 +321,16 @@ public class StorageBase : MonoBehaviour
         {
             for (int l = 0; l < itemSize.y; l++)
             {
-                TileSlot slot = ItemSlots.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+                Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
                 if(slot != null)
                 {
                     if (isMovable)
                     {
-                        slot.isHighLight = true;
+                        slot.TileSlot.isHighLight = true;
                     }
                     else
                     {
-                        slot.isRedLight = true;
+                        slot.TileSlot.isRedLight = true;
                     }
               
                 }
@@ -259,5 +340,35 @@ public class StorageBase : MonoBehaviour
     }
     #endregion
 
+    #region General
+    public void ConnectSelf()
+    {
+        SetTiles();
+        SetTileCoordinates();
+    }
+    public void ConnectToInventoryPage()
+    {
+        SetTileSlots();
+        SetTileSlotCoordinates();
+        ConnectTileSlotsToTiles();
+        SetConnectTileSlotsToTiles();
+    }
+
+    public void RefreshInventoryPage()
+    {
+        for (int i = 0; i < TargetItemSlots.childCount; i++)
+        {
+            Destroy(TargetItemSlots.GetChild(i).gameObject);
+        }
+
+        foreach (ItemBase item in Items)
+        {
+            CreateItemSlot(item);
+        }
+    }
+
+
+
+    #endregion
 
 }

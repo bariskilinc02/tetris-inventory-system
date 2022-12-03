@@ -45,7 +45,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 991378967808292983}
-  - component: {fileID: 6058213620215134199}
+  - component: {fileID: 723728744167764399}
   - component: {fileID: 7432602789120729180}
   - component: {fileID: 8641930195492639027}
   m_Layer: 5
@@ -76,7 +76,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6058213620215134199
+--- !u!114 &723728744167764399
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,12 +85,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 3868478091695241937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6f97f1bdbd3de040b2a00ee964c8f42, type: 3}
+  m_Script: {fileID: 11500000, guid: 302b37ffb0020fc4796ee2081d7e25d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ConnectedTile:
+    ConnectedStorage: {fileID: 0}
+    AssignedItem: {fileID: 0}
+    Coordinats: {x: 0, y: 0}
+    TileSlot: {fileID: 0}
   ConnectedStorage: {fileID: 0}
   AssignedItem: {fileID: 0}
   Coordinats: {x: 0, y: 0}
+  isHighLight: 0
+  isRedLight: 0
+  Image: {fileID: 0}
 --- !u!222 &7432602789120729180
 CanvasRenderer:
   m_ObjectHideFlags: 0
