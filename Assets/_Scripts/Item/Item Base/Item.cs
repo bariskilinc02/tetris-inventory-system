@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/Level", order = 1)]
-public class ItemBase: ScriptableObject
+[CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/BaseItem", order = 1)]
+public class Item: ScriptableObject
 {
     public string Name;
     public string Id;
@@ -19,4 +19,19 @@ public class ItemBase: ScriptableObject
 
     public float ItemWeight;
     public float TotalWeight;
+
+    public bool IsStorageItem()
+    {
+        if (GetType() == typeof(StorageItem))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+      
+    }
+
+
 }

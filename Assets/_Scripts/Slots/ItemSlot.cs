@@ -6,7 +6,7 @@ public class ItemSlot : MonoBehaviour
 {
 
     public StorageBase ConnectedStorage;
-    public ItemBase AssignedItem;
+    public Item AssignedItem;
     public Tile PivotTileSlot;
 
     public List<Tile> ConnectedTileSlots;

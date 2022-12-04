@@ -3,35 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StorageBase : MonoBehaviour, IStoragable
+public class StorageBase : MonoBehaviour
 {
-
+    public bool IsFixed;
+    public Item ConnectedItem;
 
     public Transform TargetTileMap;
     public Transform TargetItemSlots;
 
     public Storage Storage;
 
-    [SerializeField] private Vector2Int _tileSize;
-    [SerializeField] private List<ItemBase> _items;
-
-    public Vector2Int TileSize
-    {
-        get => _tileSize;
-        set => _tileSize = value;
-    }
-
-    public List<ItemBase> Items
-    {
-        get => _items;
-        set => _items = value;
-    }
-    //public Vector2Int TileSize;
-    //public List<ItemBase> Items;
     public List<TileSlot> TileSlots;
     public List<Tile> Tiles;
 
-    [SerializeField]private bool _isConnectedToTarget;
+    [SerializeField] private bool _isConnectedToTarget;
     [SerializeField] private bool _isStorageUIUpdated;
 
     public GameObject ItemSlotPrefab;
@@ -50,21 +35,22 @@ public class StorageBase : MonoBehaviour, IStoragable
 
     private void Awake()
     {
+        if (!IsFixed) return;
         Init();
     }
 
     private void Start()
     {
-        AddItem_Auto("akm");
-        AddItem_Auto("glock17");
-        AddItem_Auto("chest");
+        //AddItem_Auto("akm");
+        //AddItem_Auto("glock17");
+        //AddItem_Auto("chest");
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            AddItem_Auto("glock17");
+            AddItem_Auto("chest");
         }
 
         if (_isConnectedToTarget == false)
@@ -104,9 +90,9 @@ public class StorageBase : MonoBehaviour, IStoragable
     public void SetTileSlotCoordinates()
     {
         int counter = 0;
-        for (int i = 0; i < TileSlots.Count / TileSize.x; i++)
+        for (int i = 0; i < TileSlots.Count / Storage.TileSize.x; i++)
         {
-            for (int l = 0; l < TileSlots.Count / TileSize.y; l++)
+            for (int l = 0; l < TileSlots.Count / Storage.TileSize.y; l++)
             {
                 TileSlots[counter].Coordinats = new Vector2Int(l, i);
                 counter += 1;
@@ -120,7 +106,7 @@ public class StorageBase : MonoBehaviour, IStoragable
     {
         Tiles.Clear();
 
-        for (int i = 0; i < TileSize.x * TileSize.y; i++)
+        for (int i = 0; i < Storage.TileSize.x * Storage.TileSize.y; i++)
         {
             Tile tile = new Tile();
 
@@ -132,9 +118,9 @@ public class StorageBase : MonoBehaviour, IStoragable
     public void SetTileCoordinates()
     {
         int counter = 0;
-        for (int i = 0; i < Tiles.Count / TileSize.x; i++)
+        for (int i = 0; i < Tiles.Count / Storage.TileSize.x; i++)
         {
-            for (int l = 0; l < Tiles.Count / TileSize.y; l++)
+            for (int l = 0; l < Tiles.Count / Storage.TileSize.y; l++)
             {
                 Tiles[counter].Coordinats = new Vector2Int(l, i);
                 counter += 1;
@@ -144,7 +130,7 @@ public class StorageBase : MonoBehaviour, IStoragable
 
     public void ConnectTileSlotsToTiles()
     {
-        for (int i = 0; i < TileSize.x * TileSize.y; i++)
+        for (int i = 0; i < Storage.TileSize.x * Storage.TileSize.y; i++)
         {
             Tiles[i].TileSlot = TileSlots[i];
         }
@@ -206,12 +192,12 @@ public class StorageBase : MonoBehaviour, IStoragable
     #endregion
 
     #region Create
-    public ItemBase CreateNewItem(string id)
+    public Item CreateNewItem(string id)
     {
         return Instantiate(ItemDataBase.Instance.Items.Find(x => x.Id == id));
     }
     
-    public void CreateItemSlot(ItemBase item)
+    public void CreateItemSlot(Item item)
     {
         ItemSlot itemSlot = CreateItemSlot(item.Id, item.Coordinat);
 
@@ -253,7 +239,7 @@ public class StorageBase : MonoBehaviour, IStoragable
     #region Add Item
     public void AddItem_Auto(string id)
     {
-        ItemBase item = CreateNewItem(id);
+        Item item = CreateNewItem(id);
 
         Vector2Int toCoordinate = FindEmptyTileArea(item.Size);
 
@@ -273,7 +259,7 @@ public class StorageBase : MonoBehaviour, IStoragable
         }
     }
 
-    public void AddItem_ToCoordinate(ItemBase item, Vector2Int coordinate)
+    public void AddItem_ToCoordinate(Item item, Vector2Int coordinate)
     {
         Vector2Int pivotPosition = coordinate;
 
@@ -286,7 +272,7 @@ public class StorageBase : MonoBehaviour, IStoragable
             }
         }
 
-        Tiles.Find(x => x.Coordinats.x == coordinate.x && x.Coordinats.y == coordinate.y).ConnectedStorage.Items.Add(item);
+        Tiles.Find(x => x.Coordinats.x == coordinate.x && x.Coordinats.y == coordinate.y).ConnectedStorage.Storage.Items.Add(item);
 
     }
 
@@ -303,10 +289,11 @@ public class StorageBase : MonoBehaviour, IStoragable
         }
     }
 
-  
+
     #endregion
 
     #region Remove Item
+
     public void RemoveItemSlotFromTileSlots(ItemSlot itemSlot)
     {
         for (int i = 0; i < itemSlot.ConnectedTileSlots.Count; i++)
@@ -314,8 +301,10 @@ public class StorageBase : MonoBehaviour, IStoragable
             itemSlot.ConnectedTileSlots[i].AssignedItem = null;
         }
         itemSlot.ConnectedTileSlots.Clear();
-        itemSlot.ConnectedStorage.Items.Remove(itemSlot.ConnectedStorage.Items.Find(x => x == itemSlot.AssignedItem));
+        itemSlot.ConnectedStorage.Storage.Items.Remove(itemSlot.ConnectedStorage.Storage.Items.Find(x => x == itemSlot.AssignedItem));
     }
+    
+
     #endregion
 
     #region UI Configuration
@@ -324,7 +313,12 @@ public class StorageBase : MonoBehaviour, IStoragable
         itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = itemSlot.AssignedItem.Sprite;
     }
 
-    public void SetItemToEmptyArea(ItemBase item, Tile currentSlot)
+    public void DeleteItemSlot(ItemSlot itemSlot)
+    {
+        Destroy(itemSlot.gameObject);
+    }
+
+    public void SetItemToEmptyArea(Item item, Tile currentSlot)
     {
         Vector2Int pivotPosition = currentSlot.Coordinats;
 
@@ -337,7 +331,7 @@ public class StorageBase : MonoBehaviour, IStoragable
             }
         }
 
-        currentSlot.ConnectedStorage.Items.Add(item);
+        currentSlot.ConnectedStorage.Storage.Items.Add(item);
     }
     /// <summary>
     /// Finds item slot at coordinate with given size and checks if the fill is empty
@@ -393,7 +387,7 @@ public class StorageBase : MonoBehaviour, IStoragable
             Destroy(TargetItemSlots.GetChild(i).gameObject);
         }
 
-        foreach (ItemBase item in Items)
+        foreach (Item item in Storage.Items)
         {
             CreateItemSlot(item);
         }

@@ -8,12 +8,12 @@ public class ItemDataBase : MonoBehaviour
 {
     public static ItemDataBase Instance;
 
-    public List<ItemBase> Items;
+    public List<Item> Items;
     private void Awake()
     {
         Instance = this;
 
-        Items = Resources.LoadAll<ItemBase>("ItemDataBase").ToList();
+        Items = Resources.LoadAll<Item>("ItemDataBase").ToList();
     }
 
     public Type ReturnClassType(string id)
@@ -23,7 +23,7 @@ public class ItemDataBase : MonoBehaviour
         return type;
     }
 
-    public ItemBase CreateInstanceOfItem(string id)
+    public Item CreateInstanceOfItem(string id)
     {
         var item = Instance.Items.Find(x => x.Id == id);
         return item;

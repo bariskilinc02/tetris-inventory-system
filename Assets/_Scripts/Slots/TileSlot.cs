@@ -7,7 +7,7 @@ public class TileSlot : MonoBehaviour
 {
     public Tile ConnectedTile;
     public StorageBase ConnectedStorage;
-    public ItemBase AssignedItem;
+    public Item AssignedItem;
     public Vector2Int Coordinats;
 
     [HideInInspector] public bool isHighLight, isRedLight;

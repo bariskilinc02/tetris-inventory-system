@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    public ItemBase ItemBase;
+    public Inventory ConnectedInventory;
+    public Item ItemBase;
+
+    public string itemId;
     void Start()
     {
         //ItemBase = new StorageItem().Construct("chest");
@@ -14,8 +17,19 @@ public class Test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            AddItemToInventory();
+        }
         //Debug.Log(ItemDataBase.Instance.ReturnClassType("chest"));
         //StorageItem.TileSize = new Vector2Int(1,1);
         //Debug.Log(StorageItem.TileSize);
+    }
+
+    public void AddItemToInventory()
+    {
+        if (ConnectedInventory == null) return;
+
+        ConnectedInventory.AddItem_Auto(itemId);
     }
 }

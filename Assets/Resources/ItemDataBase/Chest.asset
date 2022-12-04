@@ -21,5 +21,7 @@ MonoBehaviour:
   MaxQuantity: 0
   ItemWeight: 0
   TotalWeight: 0
-  _tileSize: {x: 0, y: 0}
-  _subItems: []
+  Storage:
+    _tileSize: {x: 5, y: 5}
+    _items: []
+    _tiles: []

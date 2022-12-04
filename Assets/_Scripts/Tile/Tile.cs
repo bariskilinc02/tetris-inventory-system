@@ -6,7 +6,7 @@ using UnityEngine;
 public class Tile 
 {
     public StorageBase ConnectedStorage;
-    public ItemBase AssignedItem;
+    public Item AssignedItem;
     public Vector2Int Coordinats;
     public TileSlot TileSlot;
 

@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/Storage Item", order = 1)]
-public class StorageItem : ItemBase, IStoragable
+public class StorageItem : Item
 {
+    public Storage Storage = new Storage();
 
-    [SerializeField] private Vector2Int _tileSize;
-    [SerializeField] private List<ItemBase> _items;
-
-    public Vector2Int TileSize {
-        get => _tileSize;
-        set => _tileSize = value; 
+    private void Awake()
+    {
+        Storage.Init();
     }
 
-    public List<ItemBase> Items { 
-        get => _items;
-        set => _items = value;
-    }
 }

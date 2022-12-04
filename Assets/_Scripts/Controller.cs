@@ -15,8 +15,10 @@ public class Controller : MonoBehaviour
     private PointerEventData m_PointerEventData;
     private EventSystem m_EventSystem;
 
-    public bool isAreaEmpty;
-    public bool isItemMoving;
+    [HideInInspector] public bool isAreaEmpty;
+    [HideInInspector] public bool isItemMoving;
+    public bool isItemPropertiesShowing;
+
 
     #region Unity Functions
     private void Awake()
@@ -39,40 +41,82 @@ public class Controller : MonoBehaviour
         {
             UpdateMovingItem();
 
-            IsMouseOnSlot();
+            OnMouseTileSlot();
 
             IsMouseFinishMovingItem();
         }
         else
         {
             IsMouseStartMoveItem();
+
+            IsMouseRightClick();
         }
+
+     
     }
 
     #endregion
 
     #region Mouse Commands
-    private void IsMouseOnSlot()
+    private void IsMouseRightClick()
+    {
+        if (!Input.GetMouseButtonDown(1)) return;
+
+        List <RaycastResult> results = SendRay();
+
+        if (results.Count < 1) return;
+        if (results[0].gameObject.CompareTag("ItemSlot"))
+        {
+            ItemSlot clickedItemSlot = results[0].gameObject.GetComponent<ItemSlot>();
+            if (clickedItemSlot.AssignedItem.GetType() == typeof(StorageItem))
+            {
+
+                StorageItem currentStorageItem = (StorageItem)clickedItemSlot.AssignedItem;
+                Storage currentStorage = currentStorageItem.Storage;
+
+                StoragePageCreator.Instace.Create(clickedItemSlot.AssignedItem);
+            }
+        }
+
+    }
+
+
+    private void OnMouseTileSlot()
     {
         List<RaycastResult> results  = SendRay();
 
-        if (results.Count > 0)
+        if (results.Count < 1) return;
+
+        if (results[0].gameObject.CompareTag("TileSlot"))
         {
-            if (results[0].gameObject.CompareTag("TileSlot"))
+            _currentSlot = results[0].gameObject.GetComponent<TileSlot>();
+
+            //if (CurrentMovingItem.AssignedItem.GetType() == typeof(StorageItem))
+            //{
+            //    StorageItem Item = (StorageItem)CurrentMovingItem.AssignedItem;
+            //    Item.Storage.Items.Exists(x => x == StoragePageCreator.Instace.CurrentItem);
+            //}
+
+            if (CurrentMovingItem.AssignedItem == StoragePageCreator.Instace.CurrentItem)
             {
-                _currentSlot = results[0].gameObject.GetComponent<TileSlot>();
-
-                isAreaEmpty =_currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats);
-
-                if(isAreaEmpty) _currentSlot.ConnectedStorage.UpdateTileSlotHighlight(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats, true);
-                else _currentSlot.ConnectedStorage.UpdateTileSlotHighlight(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats, false);
-
+                isAreaEmpty = false;
             }
             else
             {
-                _currentSlot = null;
+                isAreaEmpty = _currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats);
             }
+
+
+
+            if (isAreaEmpty) _currentSlot.ConnectedStorage.UpdateTileSlotHighlight(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats, true);
+            else _currentSlot.ConnectedStorage.UpdateTileSlotHighlight(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats, false);
+
         }
+        else
+        {
+            _currentSlot = null;
+        }
+
     }
 
     private void IsMouseStartMoveItem()
@@ -81,17 +125,16 @@ public class Controller : MonoBehaviour
 
         List<RaycastResult> results = SendRay();
 
-        if (results.Count > 0)
+        if (results.Count < 1) return;
+        if (results[0].gameObject.CompareTag("ItemSlot"))
         {
-            if (results[0].gameObject.CompareTag("ItemSlot"))
-            {
-                CurrentMovingItem = results[0].gameObject.GetComponent<ItemSlot>();
-                CurrentMovingItem.GetComponent<Image>().raycastTarget = false;
-                CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
+            CurrentMovingItem = results[0].gameObject.GetComponent<ItemSlot>();
+            CurrentMovingItem.GetComponent<Image>().raycastTarget = false;
+            CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
 
-                isItemMoving = true;
-            }
+            isItemMoving = true;
         }
+
     }
    
     private void UpdateMovingItem()
@@ -108,45 +151,71 @@ public class Controller : MonoBehaviour
 
         List<RaycastResult> results = SendRay();
 
-        if (results.Count > 0)
+        if (results.Count < 1) return;
+
+        if (results[0].gameObject.CompareTag("TileSlot"))
         {
-            if (results[0].gameObject.CompareTag("TileSlot"))
+            _currentSlot = results[0].gameObject.GetComponent<TileSlot>();
+
+            if (CurrentMovingItem.AssignedItem == StoragePageCreator.Instace.CurrentItem)
             {
-                _currentSlot = results[0].gameObject.GetComponent<TileSlot>();
+                RestoreItemSlot(CurrentMovingItem);
+            }
+            else if (_currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
+            {
+                _currentSlot.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, _currentSlot.ConnectedTile);
 
-                if (_currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
+                _currentSlot.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, _currentSlot.ConnectedTile);
+                _currentSlot.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, _currentSlot.Coordinats);
+
+                CurrentMovingItem.transform.parent = _currentSlot.ConnectedStorage.TargetItemSlots;
+                CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
+                isItemMoving = false;
+            }
+            else
+            {
+                RestoreItemSlot(CurrentMovingItem);
+            }
+        }
+        else if (results[0].gameObject.CompareTag("ItemSlot"))
+        {
+            ItemSlot currentItemSlot = results[0].gameObject.GetComponent<ItemSlot>();
+            Item currentItem = currentItemSlot.AssignedItem;
+
+            if (currentItem.IsStorageItem())
+            {
+                StorageItem currentStorageItem = (StorageItem)currentItem;
+                Storage currentStorage = currentStorageItem.Storage;
+
+                if (currentStorage.FindEmptyTileArea(CurrentMovingItem.AssignedItem.Size) != new Vector2Int(-1, -1))
                 {
-                    _currentSlot.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, _currentSlot.ConnectedTile);
+                    CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
+                    CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
+                    currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
 
-                    _currentSlot.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, _currentSlot.ConnectedTile);
-                    _currentSlot.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, _currentSlot.Coordinats);
-
-                    CurrentMovingItem.transform.parent = _currentSlot.ConnectedStorage.TargetItemSlots;
-                    CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
                     isItemMoving = false;
                 }
                 else
                 {
-                    CurrentMovingItem.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot);
+                    RestoreItemSlot(CurrentMovingItem);
+                }
 
-                    CurrentMovingItem.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot);
-                    CurrentMovingItem.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot.TileSlot.Coordinats);
-
-                    CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
-                    isItemMoving = false;
+                if (currentItem == StoragePageCreator.Instace.CurrentItem)
+                {
+                    StoragePageCreator.Instace.CurrentInventory.RefreshInventoryPage();
                 }
             }
             else
             {
-                CurrentMovingItem.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, CurrentMovingItem.PivotTileSlot);   
-
-                CurrentMovingItem.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot);
-                CurrentMovingItem.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, CurrentMovingItem.PivotTileSlot.TileSlot.Coordinats);
-
-                CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
-                isItemMoving = false;
+                RestoreItemSlot(CurrentMovingItem);
             }
+           
         }
+        else
+        {
+            RestoreItemSlot(CurrentMovingItem);
+        }
+
     }
     #endregion
 
@@ -160,4 +229,15 @@ public class Controller : MonoBehaviour
         return results;
     }
 
+
+    private void RestoreItemSlot(ItemSlot itemSlot)
+    {
+        itemSlot.ConnectedStorage.SetItemToEmptyArea(itemSlot.AssignedItem, itemSlot.PivotTileSlot);
+
+        itemSlot.ConnectedStorage.ReplaceItemSlot(itemSlot, itemSlot.PivotTileSlot);
+        itemSlot.ConnectedStorage.SynchTileSlotsInItemSlot(itemSlot, itemSlot.PivotTileSlot.TileSlot.Coordinats);
+
+        itemSlot.GetComponent<Image>().raycastTarget = true;
+        isItemMoving = false;
+    }
 }
