@@ -30,6 +30,9 @@ public class StorageBase : MonoBehaviour
         if (_isConnectedToTarget)
         {
             ConnectToInventoryPage();
+            RefreshInventoryPage();
+            //SetConnectItemsToTiles(); 
+            //RefreshInventoryPage();
         }
     }
 
@@ -97,6 +100,15 @@ public class StorageBase : MonoBehaviour
                 TileSlots[counter].Coordinats = new Vector2Int(l, i);
                 counter += 1;
             }
+        }
+    }
+    
+    public void SetConnectItemsToTiles()
+    {
+        for (int i = 0; i < Storage.Items.Count; i++)
+        {
+            Tile tile = Tiles.Find(x => x.Coordinats == Storage.Items[i].Coordinat);
+            SetItemToEmptyArea(Storage.Items[i], tile);
         }
     }
     #endregion
@@ -316,7 +328,17 @@ public class StorageBase : MonoBehaviour
             }
         }
     }
-
+    public void SynchTileSlotsWithItemInStorage(Item item, Vector2Int coordinate)
+    {
+        for (int i = 0; i < item.Size.x; i++)
+        {
+            for (int l = 0; l < item.Size.y; l++)
+            {
+                Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+                slot.AssignedItem = item;
+            }
+        }
+    }
 
     #endregion
 
@@ -417,6 +439,7 @@ public class StorageBase : MonoBehaviour
 
         foreach (Item item in Storage.Items)
         {
+            SynchTileSlotsWithItemInStorage(item, item.Coordinat);
             CreateItemSlot(item);
         }
     }

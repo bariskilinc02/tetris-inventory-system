@@ -17,6 +17,7 @@ MonoBehaviour:
   Size: {x: 4, y: 1}
   Coordinat: {x: 0, y: 0}
   Sprite: {fileID: 21300000, guid: 9858aa96fc6e037449201afad594e725, type: 3}
+  Direction: 0
   Quantity: 0
   MaxQuantity: 1
   ItemWeight: 1

@@ -32,7 +32,6 @@ public class Item: ScriptableObject
         {
             return false;
         }
-      
     }
 
     public void ChangeItemDirection()
