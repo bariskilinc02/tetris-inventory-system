@@ -103,7 +103,6 @@ public class StoragePageCreator : MonoBehaviour
 
         CreateTileSlots();
         SetTileSlots();
-
     }
     public void CreateFrame()
     {

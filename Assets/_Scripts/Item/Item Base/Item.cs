@@ -14,6 +14,8 @@ public class Item: ScriptableObject
 
     public Sprite Sprite;
 
+    public bool Direction;
+
     public int Quantity;
     public int MaxQuantity;
 
@@ -33,5 +35,11 @@ public class Item: ScriptableObject
       
     }
 
+    public void ChangeItemDirection()
+    {
+        Vector2Int currentSize = Size;
+        Direction = !Direction;
 
+        Size = new Vector2Int(currentSize.y, currentSize.x);
+    }
 }

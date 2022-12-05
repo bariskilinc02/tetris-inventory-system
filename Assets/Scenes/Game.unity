@@ -3556,7 +3556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ConnectedInventory: {fileID: 166296005}
   ItemBase: {fileID: 0}
-  itemId: minibox
+  itemId: m4a1
 --- !u!4 &669227215
 Transform:
   m_ObjectHideFlags: 0

@@ -150,7 +150,7 @@ public class StorageBase : MonoBehaviour
         {
             tempCoordinate = Tiles[a].Coordinats;
 
-            if (IsTileAreaEmpty(itemSize, tempCoordinate))
+            if (IsEmptyTileArea(itemSize, tempCoordinate))
             {
                 return tempCoordinate;
             }
@@ -159,11 +159,28 @@ public class StorageBase : MonoBehaviour
         return new Vector2Int(-1, -1);
     }
 
+    public bool IsExistEmptyTileArea(Vector2Int itemSize)
+    {
+        Vector2Int tempCoordinate = new Vector2Int();
+
+        for (int a = 0; a < Tiles.Count; a++)
+        {
+            tempCoordinate = Tiles[a].Coordinats;
+
+            if (IsEmptyTileArea(itemSize, tempCoordinate))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Determine if given coordinates are empty and return boolean
     /// </summary>
     /// <returns></returns>
-    public bool IsTileAreaEmpty(Vector2Int itemSize, Vector2Int coordinate)
+    public bool IsEmptyTileArea(Vector2Int itemSize, Vector2Int coordinate)
     {
         Vector2Int pivotPosition = coordinate;
 
@@ -189,6 +206,8 @@ public class StorageBase : MonoBehaviour
 
         return isEmpty;
     }
+
+
     #endregion
 
     #region Create
@@ -203,6 +222,7 @@ public class StorageBase : MonoBehaviour
 
         SetItemsSlotSprite(itemSlot);
         SynchTileSlotsInItemSlot(itemSlot, item.Coordinat);
+        if (itemSlot.AssignedItem.Direction) itemSlot.ChangeDirection();
     }
     #endregion
 
@@ -243,6 +263,13 @@ public class StorageBase : MonoBehaviour
 
         Vector2Int toCoordinate = FindEmptyTileArea(item.Size);
 
+        if(toCoordinate == new Vector2Int(-1, -1))
+        {
+            item.ChangeItemDirection();
+            toCoordinate = FindEmptyTileArea(item.Size);
+        }
+
+
         if (toCoordinate != new Vector2Int(-1, -1))
         {
             AddItem_ToCoordinate(item, toCoordinate);
@@ -254,6 +281,7 @@ public class StorageBase : MonoBehaviour
                 SetItemsSlotSprite(itemSlot);
 
                 SynchTileSlotsInItemSlot(itemSlot, toCoordinate);
+                itemSlot.ChangeDirection();
             }
 
         }
@@ -397,4 +425,7 @@ public class StorageBase : MonoBehaviour
 
     #endregion
 
+    #region Item Direction
+    
+    #endregion
 }

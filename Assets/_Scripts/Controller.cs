@@ -19,6 +19,8 @@ public class Controller : MonoBehaviour
     [HideInInspector] public bool isItemMoving;
     public bool isItemPropertiesShowing;
 
+    [SerializeField] private bool isItemRotated;
+
 
     #region Unity Functions
     private void Awake()
@@ -35,13 +37,12 @@ public class Controller : MonoBehaviour
 
     void Update()
     {
-
-
         if (isItemMoving)
         {
             UpdateMovingItem();
 
             OnMouseTileSlot();
+            OnChangeItemDirection(CurrentMovingItem);
 
             IsMouseFinishMovingItem();
         }
@@ -51,8 +52,6 @@ public class Controller : MonoBehaviour
 
             IsMouseRightClick();
         }
-
-     
     }
 
     #endregion
@@ -103,7 +102,7 @@ public class Controller : MonoBehaviour
             }
             else
             {
-                isAreaEmpty = _currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats);
+                isAreaEmpty = _currentSlot.ConnectedStorage.IsEmptyTileArea(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats);
             }
 
 
@@ -122,6 +121,8 @@ public class Controller : MonoBehaviour
     private void IsMouseStartMoveItem()
     {
         if (!Input.GetMouseButtonDown(0) && !isItemMoving) return;
+
+        isItemRotated = false;
 
         List<RaycastResult> results = SendRay();
 
@@ -161,7 +162,7 @@ public class Controller : MonoBehaviour
             {
                 RestoreItemSlot(CurrentMovingItem);
             }
-            else if (_currentSlot.ConnectedStorage.IsTileAreaEmpty(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
+            else if (_currentSlot.ConnectedStorage.IsEmptyTileArea(CurrentMovingItem.AssignedItem.Size, _currentSlot.Coordinats))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
             {
                 _currentSlot.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, _currentSlot.ConnectedTile);
 
@@ -187,8 +188,17 @@ public class Controller : MonoBehaviour
                 StorageItem currentStorageItem = (StorageItem)currentItem;
                 Storage currentStorage = currentStorageItem.Storage;
 
-                if (currentStorage.FindEmptyTileArea(CurrentMovingItem.AssignedItem.Size) != new Vector2Int(-1, -1))
+                if (currentStorage.IsExistEmptyTileArea(CurrentMovingItem.AssignedItem.Size))
                 {
+                    CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
+                    CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
+                    currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
+
+                    isItemMoving = false;
+                }
+                else if (currentStorage.IsExistEmptyTileArea(new Vector2Int(CurrentMovingItem.AssignedItem.Size.y, CurrentMovingItem.AssignedItem.Size.x)))
+                {
+                    CurrentMovingItem.AssignedItem.ChangeItemDirection();
                     CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
                     CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
                     currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
@@ -232,6 +242,8 @@ public class Controller : MonoBehaviour
 
     private void RestoreItemSlot(ItemSlot itemSlot)
     {
+        if (isItemRotated) ChangeItemDirection(itemSlot);
+
         itemSlot.ConnectedStorage.SetItemToEmptyArea(itemSlot.AssignedItem, itemSlot.PivotTileSlot);
 
         itemSlot.ConnectedStorage.ReplaceItemSlot(itemSlot, itemSlot.PivotTileSlot);
@@ -239,5 +251,21 @@ public class Controller : MonoBehaviour
 
         itemSlot.GetComponent<Image>().raycastTarget = true;
         isItemMoving = false;
+    }
+
+    private void ChangeItemDirection(ItemSlot itemSlot)
+    {
+        itemSlot.AssignedItem.ChangeItemDirection();
+        itemSlot.ChangeDirection();
+    }
+
+    private void OnChangeItemDirection(ItemSlot itemSlot)
+    {
+        if (!Input.GetKeyDown(KeyCode.R)) return;
+        isItemRotated = !isItemRotated;
+
+        itemSlot.AssignedItem.ChangeItemDirection();
+        itemSlot.ChangeDirection();
+
     }
 }

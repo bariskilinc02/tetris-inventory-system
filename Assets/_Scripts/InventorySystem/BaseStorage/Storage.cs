@@ -66,6 +66,14 @@ public class Storage : IStorage
 
         Vector2Int toCoordinate = FindEmptyTileArea(item.Size);
 
+         if (toCoordinate == new Vector2Int(-1, -1))
+         {
+            item.ChangeItemDirection();
+            toCoordinate = FindEmptyTileArea(item.Size);
+
+         }
+   
+
         if (toCoordinate != new Vector2Int(-1, -1))
         {
             item.Coordinat = toCoordinate;
@@ -77,6 +85,12 @@ public class Storage : IStorage
     {
         Vector2Int toCoordinate = FindEmptyTileArea(item.Size);
 
+        if (toCoordinate == new Vector2Int(-1, -1))
+        {
+            item.ChangeItemDirection();
+            toCoordinate = FindEmptyTileArea(item.Size);
+        }
+        Debug.Log(toCoordinate);
         if (toCoordinate != new Vector2Int(-1, -1))
         {
             item.Coordinat = toCoordinate;
@@ -88,7 +102,24 @@ public class Storage : IStorage
     #endregion
 
     #region Control
-    public bool IsTileAreaEmpty(Vector2Int itemSize, Vector2Int coordinate)
+    public bool IsExistEmptyTileArea(Vector2Int itemSize)
+    {
+        Vector2Int tempCoordinate = new Vector2Int();
+
+        for (int a = 0; a < Tiles.Count; a++)
+        {
+            tempCoordinate = Tiles[a].Coordinats;
+
+            if (IsEmptyTileArea(itemSize, tempCoordinate))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool IsEmptyTileArea(Vector2Int itemSize, Vector2Int coordinate)
     {
         Vector2Int pivotPosition = coordinate;
 
@@ -122,7 +153,7 @@ public class Storage : IStorage
         {
             tempCoordinate = Tiles[a].Coordinats;
 
-            if (IsTileAreaEmpty(itemSize, tempCoordinate))
+            if (IsEmptyTileArea(itemSize, tempCoordinate))
             {
                 return tempCoordinate;
             }
