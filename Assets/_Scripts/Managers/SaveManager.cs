@@ -7,6 +7,13 @@ public class SaveManager : MonoBehaviour
     public bool LoadOnStart;
 
     [SerializeField] private Inventory Inventory;
+    private const string inventoryId = "inventory";
+
+    [SerializeField] private Inventory Storage;
+    private const string storageId = "storage";
+
+    [SerializeField] private Inventory PrimaryWeapon;
+    private const string primaryWeaponId = "primaryWeapon";
 
     private void Awake()
     {
@@ -30,16 +37,28 @@ public class SaveManager : MonoBehaviour
     #region Save Load Game
     private void SaveGame()
     {
-        SaveData<StorageData>("item", ExportStorage(Inventory.Storage));
+        SaveData<StorageData>(inventoryId, ExportStorage(Inventory.Storage));
+        SaveData<StorageData>(storageId, ExportStorage(Storage.Storage));
+        SaveData<StorageData>(primaryWeaponId, ExportStorage(PrimaryWeapon.Storage));
     }
 
     private void LoadGame()
     {
-        if (PlayerPrefs.HasKey("item"))
+        if (PlayerPrefs.HasKey(inventoryId))
         {
-            Inventory.Storage = ImportStorage(LoadData<StorageData>("item"));
+            Inventory.Storage = ImportStorage(LoadData<StorageData>(inventoryId));
         }
-           
+
+        if (PlayerPrefs.HasKey(storageId))
+        {
+            Storage.Storage = ImportStorage(LoadData<StorageData>(storageId));
+        }
+
+        if (PlayerPrefs.HasKey(primaryWeaponId))
+        {
+            PrimaryWeapon.Storage = ImportStorage(LoadData<StorageData>(primaryWeaponId));
+        }
+
     }
 
     #endregion

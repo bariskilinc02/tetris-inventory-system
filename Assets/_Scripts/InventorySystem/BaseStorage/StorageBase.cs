@@ -6,18 +6,20 @@ using UnityEngine.UI;
 public class StorageBase : MonoBehaviour
 {
     public bool IsFixed;
-    public Item ConnectedItem;
+    public bool isExtended;
+    public List<Types.ItemType> AvailableItemTypes;
+    [HideInInspector] public Item ConnectedItem;
 
     public Transform TargetTileMap;
     public Transform TargetItemSlots;
 
     public Storage Storage;
 
-    public List<TileSlot> TileSlots;
-    public List<Tile> Tiles;
+    [HideInInspector] public List<TileSlot> TileSlots;
+    [HideInInspector] public List<Tile> Tiles;
 
-    [SerializeField] private bool _isConnectedToTarget;
-    [SerializeField] private bool _isStorageUIUpdated;
+    [HideInInspector] private bool _isConnectedToTarget;
+    [HideInInspector] private bool _isStorageUIUpdated;
 
     public GameObject ItemSlotPrefab;
 
@@ -233,7 +235,15 @@ public class StorageBase : MonoBehaviour
         ItemSlot itemSlot = CreateItemSlot(item.Id, item.Coordinat);
 
         SetItemsSlotSprite(itemSlot);
-        SynchTileSlotsInItemSlot(itemSlot, item.Coordinat);
+        if (isExtended)
+        {
+            SynchTileSlotInItemSlot(itemSlot, item.Coordinat);
+        }
+        else
+        {
+            SynchTileSlotsInItemSlot(itemSlot, item.Coordinat);
+        }
+       
         if (itemSlot.AssignedItem.Direction) itemSlot.ChangeDirection();
     }
     #endregion
@@ -328,6 +338,20 @@ public class StorageBase : MonoBehaviour
             }
         }
     }
+    public void SynchTileSlotInItemSlot(ItemSlot itemSlot, Vector2Int coordinate)
+    {
+        Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x && x.Coordinats.y == coordinate.y);
+        itemSlot.ConnectedTileSlots.Add(slot);
+        //for (int i = 0; i < itemSlot.AssignedItem.Size.x; i++)
+        //{
+        //    for (int l = 0; l < itemSlot.AssignedItem.Size.y; l++)
+        //    {
+        //        Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x + i && x.Coordinats.y == coordinate.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+        //        itemSlot.ConnectedTileSlots.Add(slot);
+        //    }
+        //}
+    }
+
     public void SynchTileSlotsWithItemInStorage(Item item, Vector2Int coordinate)
     {
         for (int i = 0; i < item.Size.x; i++)
@@ -338,6 +362,13 @@ public class StorageBase : MonoBehaviour
                 slot.AssignedItem = item;
             }
         }
+    }
+
+    public void SynchTileSlotWithItemInStorage(Item item, Vector2Int coordinate)
+    {
+        Tile slot = Tiles.Find(x => x.Coordinats.x == coordinate.x && x.Coordinats.y == coordinate.y); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+        slot.AssignedItem = item;
+
     }
 
     #endregion
@@ -353,6 +384,7 @@ public class StorageBase : MonoBehaviour
         itemSlot.ConnectedTileSlots.Clear();
         itemSlot.ConnectedStorage.Storage.Items.Remove(itemSlot.ConnectedStorage.Storage.Items.Find(x => x == itemSlot.AssignedItem));
     }
+
     
 
     #endregion
@@ -375,6 +407,22 @@ public class StorageBase : MonoBehaviour
         for (int i = 0; i < item.Size.x; i++)
         {
             for (int l = 0; l < item.Size.y; l++)
+            {
+                Tile tile = currentSlot.ConnectedStorage.Tiles.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+                tile.AssignedItem = item;
+            }
+        }
+
+        currentSlot.ConnectedStorage.Storage.Items.Add(item);
+    }
+
+    public void SetItemToEmptyTile(Item item, Tile currentSlot)
+    {
+        Vector2Int pivotPosition = currentSlot.Coordinats;
+
+        for (int i = 0; i < 1; i++)
+        {
+            for (int l = 0; l < 1; l++)
             {
                 Tile tile = currentSlot.ConnectedStorage.Tiles.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
                 tile.AssignedItem = item;
@@ -439,7 +487,15 @@ public class StorageBase : MonoBehaviour
 
         foreach (Item item in Storage.Items)
         {
-            SynchTileSlotsWithItemInStorage(item, item.Coordinat);
+            if (isExtended)
+            {
+                SynchTileSlotWithItemInStorage(item, item.Coordinat);
+            }
+            else
+            {
+                SynchTileSlotsWithItemInStorage(item, item.Coordinat);
+            }
+   
             CreateItemSlot(item);
         }
     }

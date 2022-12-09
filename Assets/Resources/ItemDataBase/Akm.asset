@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238f62da66f7f934eb5d2912db9a1de6, type: 3}
   m_Name: Akm
   m_EditorClassIdentifier: 
+  ItemType: 2
   Name: Akm
   Id: akm
   Size: {x: 3, y: 1}
   Coordinat: {x: 0, y: 0}
   Sprite: {fileID: 21300000, guid: e92d0ad3e28491a4b8d8629051606a19, type: 3}
+  Direction: 0
   Quantity: 0
   MaxQuantity: 0
   ItemWeight: 0

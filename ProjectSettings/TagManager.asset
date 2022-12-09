@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TileSlot
   - ItemSlot
+  - CellSlot
   layers:
   - Default
   - TransparentFX
