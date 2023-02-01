@@ -8,6 +8,9 @@ public class Types
     {
         Common,
         Storage,
+        Bag,
+        Vest,
+        Armor,
         Weapon,
     }
 

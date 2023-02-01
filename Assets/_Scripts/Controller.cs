@@ -16,7 +16,7 @@ public class Controller : MonoBehaviour
     private EventSystem m_EventSystem;
 
     [HideInInspector] public bool isAreaEmpty;
-    [HideInInspector] public bool isItemMoving;
+     public bool isItemMoving;
     public bool isItemPropertiesShowing;
 
     [SerializeField] private bool isItemRotated;
@@ -136,9 +136,13 @@ public class Controller : MonoBehaviour
             CurrentMovingItem = results[0].gameObject.GetComponent<ItemSlot>();
             CurrentMovingItem.GetComponent<Image>().raycastTarget = false;
             CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
-
+            CurrentMovingItem.FixVisual();
+            
             isItemMoving = true;
+            RestoreItemSlotVisual(CurrentMovingItem, false);
         }
+        
+     
 
     }
    
@@ -153,9 +157,9 @@ public class Controller : MonoBehaviour
     private void IsMouseUp()
     {
         if (!Input.GetMouseButtonUp(0) || !isItemMoving) return;
-
+        
         List<RaycastResult> results = SendRay();
-
+        
         if (results.Count < 1) return;
 
         if (results[0].gameObject.CompareTag("TileSlot"))
@@ -168,61 +172,46 @@ public class Controller : MonoBehaviour
                 return;
             }
 
-            if(_currentTileSlot.ConnectedStorage.isExtended == false)
+            bool isAdded = false;
+            
+            if (_currentTileSlot.ConnectedStorage is Inventory currentInventory)
             {
-                if (CurrentMovingItem.AssignedItem == StoragePageCreator.Instace.CurrentItem)
-                {
-                    RestoreItemSlot(CurrentMovingItem);
-                }
-                else if (_currentTileSlot.ConnectedStorage.IsEmptyTileArea(CurrentMovingItem.AssignedItem.Size, _currentTileSlot.Coordinates))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
-                {
-                    _currentTileSlot.ConnectedStorage.SetItemToEmptyArea(CurrentMovingItem.AssignedItem, _currentTileSlot.ConnectedTile);
-
-                    _currentTileSlot.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, _currentTileSlot.ConnectedTile);
-                    _currentTileSlot.ConnectedStorage.SynchTileSlotsInItemSlot(CurrentMovingItem, _currentTileSlot.Coordinates);
-
-                    CurrentMovingItem.transform.parent = _currentTileSlot.ConnectedStorage.TargetItemSlots;
-                    CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
-                    isItemMoving = false;
-                }
-                else
-                {
-                    RestoreItemSlot(CurrentMovingItem);
-                }
+                currentInventory.AddItem(CurrentMovingItem, _currentTileSlot, out isAdded);
             }
-            else if (_currentTileSlot.ConnectedStorage.isExtended == true)
+            
+            if (_currentTileSlot.ConnectedStorage is EquipmentStorage currentEquipment)
             {
-                if (_currentTileSlot.ConnectedStorage.AvailableItemTypes.Exists(x => x == CurrentMovingItem.AssignedItem.ItemType))
+                currentEquipment.AddItem(CurrentMovingItem, _currentTileSlot, out isAdded);
+                if (isAdded)
                 {
-                    if (_currentTileSlot.ConnectedStorage.IsEmptyTileArea(new Vector2Int(1, 1), new Vector2Int(0, 0)))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
-                    {
-                        _currentTileSlot.ConnectedStorage.SetItemToEmptyTile(CurrentMovingItem.AssignedItem, _currentTileSlot.ConnectedTile);
-
-                        _currentTileSlot.ConnectedStorage.ReplaceItemSlot(CurrentMovingItem, _currentTileSlot.ConnectedTile);
-                        _currentTileSlot.ConnectedStorage.SynchTileSlotInItemSlot(CurrentMovingItem, _currentTileSlot.Coordinates);
-
-                        CurrentMovingItem.transform.parent = _currentTileSlot.ConnectedStorage.TargetItemSlots;
-                        CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
-                        isItemMoving = false;
-                    }
+                    ChangeItemRotation(CurrentMovingItem, false); 
                 }
-                else
-                {
-                    RestoreItemSlot(CurrentMovingItem);
-                }
-               
+              
             }
-
+            
+            if (isAdded)
+            {
+                CurrentMovingItem.transform.parent = _currentTileSlot.ConnectedStorage.TargetItemSlots;
+                CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
+                
+                isItemRotated = false;
+                isItemMoving = false;
+            }
+            else
+            {
+                RestoreItemSlot(CurrentMovingItem);
+            }
+            
           
+
         }
         else if (results[0].gameObject.CompareTag("ItemSlot"))
         {
             ItemSlot currentItemSlot = results[0].gameObject.GetComponent<ItemSlot>();
             Item currentItem = currentItemSlot.AssignedItem;
 
-            if (currentItem.IsStorageItem())
+            if (currentItem is StorageItem currentStorageItem)
             {
-                StorageItem currentStorageItem = (StorageItem)currentItem;
                 Storage currentStorage = currentStorageItem.Storage;
 
                 if (currentStorage.IsExistEmptyTileArea(CurrentMovingItem.AssignedItem.Size))
@@ -231,6 +220,7 @@ public class Controller : MonoBehaviour
                     CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
                     currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
 
+                    isItemRotated = false;
                     isItemMoving = false;
                 }
                 else if (currentStorage.IsExistEmptyTileArea(new Vector2Int(CurrentMovingItem.AssignedItem.Size.y, CurrentMovingItem.AssignedItem.Size.x)))
@@ -239,7 +229,8 @@ public class Controller : MonoBehaviour
                     CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
                     CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
                     currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
-
+                    
+                    isItemRotated = false;
                     isItemMoving = false;
                 }
                 else
@@ -256,6 +247,8 @@ public class Controller : MonoBehaviour
             {
                 RestoreItemSlot(CurrentMovingItem);
             }
+            
+
            
         }
         else
@@ -263,6 +256,7 @@ public class Controller : MonoBehaviour
             RestoreItemSlot(CurrentMovingItem);
         }
 
+        RestoreItemSlotVisual(CurrentMovingItem);
     }
     #endregion
 
@@ -280,6 +274,8 @@ public class Controller : MonoBehaviour
     private void RestoreItemSlot(ItemSlot itemSlot)
     {
         if (isItemRotated) ChangeItemDirection(itemSlot);
+        
+        RestoreItemSlotVisual(itemSlot);
 
         if (itemSlot.ConnectedStorage.isExtended)
         {
@@ -294,9 +290,6 @@ public class Controller : MonoBehaviour
             itemSlot.ConnectedStorage.SynchTileSlotsInItemSlot(itemSlot, itemSlot.PivotTileSlot.TileSlot.Coordinates);
         }
 
-
-   
-
         itemSlot.GetComponent<Image>().raycastTarget = true;
         isItemMoving = false;
     }
@@ -310,10 +303,40 @@ public class Controller : MonoBehaviour
     private void OnChangeItemDirection(ItemSlot itemSlot)
     {
         if (!Input.GetKeyDown(KeyCode.R)) return;
-        isItemRotated = !isItemRotated;
+        ChangeItemRotation(itemSlot);
 
-        itemSlot.AssignedItem.ChangeItemDirection();
-        itemSlot.ChangeDirection();
+    }
+
+    private void ChangeItemRotation(ItemSlot itemSlot, bool? isOverride = null)
+    {
+        if (isOverride == null)
+        {
+            isItemRotated = !isItemRotated;
+
+            itemSlot.AssignedItem.ChangeItemDirection();
+            itemSlot.ChangeDirection();
+        }
+        else
+        {
+            if (isOverride == true)
+            {
+                if (!itemSlot.AssignedItem.Direction)
+                {
+                    itemSlot.AssignedItem.ChangeItemDirection();
+                    itemSlot.ChangeDirection();
+                }
+          
+            }
+            else
+            {
+                if (itemSlot.AssignedItem.Direction)
+                {
+                    itemSlot.AssignedItem.ChangeItemDirection();
+                    itemSlot.ChangeDirection();
+                }
+            }
+        }
+        
 
     }
 
@@ -322,9 +345,41 @@ public class Controller : MonoBehaviour
     /// </summary>
     private void OpenStoragePage(Item item)
     {
-        if (item.IsStorageItem())
+        if (item is StorageItem)
         {
             StoragePageCreator.Instace.Create(item);
         }
+    }
+
+    private void RestoreItemSlotVisual(ItemSlot itemSlot, bool? isOverride = null)
+    {
+        if (isOverride != null)
+        {
+            if (isOverride == true)
+            {
+                itemSlot.FitVisual(itemSlot.PivotTileSlot.TileSlot);
+            }
+            else 
+            {
+                itemSlot.FixVisual();
+            }
+        }
+        else
+        {
+            if (itemSlot.ConnectedStorage is Inventory currentInventory)
+            {
+                itemSlot.FixVisual();
+            }
+            else if (itemSlot.ConnectedStorage is EquipmentStorage currentEquipment)
+            {
+                itemSlot.FitVisual(itemSlot.PivotTileSlot.TileSlot);
+            }
+            else
+            {
+                itemSlot.FixVisual();
+            }
+        }
+        
+      
     }
 }

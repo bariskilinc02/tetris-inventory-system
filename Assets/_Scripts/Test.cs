@@ -7,7 +7,7 @@ public class Test : MonoBehaviour
     public Inventory ConnectedInventory;
     public Item ItemBase;
 
-    public string itemId;
+    public Item item;
     void Start()
     {
         //ItemBase = new StorageItem().Construct("chest");
@@ -28,8 +28,8 @@ public class Test : MonoBehaviour
 
     public void AddItemToInventory()
     {
-        if (ConnectedInventory == null) return;
+        if (ConnectedInventory == null || item == null) return;
 
-        ConnectedInventory.AddItem_Auto(itemId);
+        ConnectedInventory.AddItem_Auto(item.Id);
     }
 }

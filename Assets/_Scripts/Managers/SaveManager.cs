@@ -12,10 +12,10 @@ public class SaveManager : MonoBehaviour
     [SerializeField] private Inventory Storage;
     private const string storageId = "storage";
 
-    [SerializeField] private Inventory PrimaryWeapon;
+    [SerializeField] private EquipmentStorage PrimaryWeapon;
     private const string primaryWeaponId = "primaryWeapon";
 
-    [SerializeField] private Inventory SecondaryWeapon;
+    [SerializeField] private EquipmentStorage SecondaryWeapon;
     private const string secondaryWeaponId = "secondaryWeapon";
     private void Awake()
     {
@@ -109,9 +109,8 @@ public class SaveManager : MonoBehaviour
             itemData.ItemCoordinate = storage.Items[i].Coordinate;
             itemData.Direction = storage.Items[i].Direction;
 
-            if (storage.Items[i].IsStorageItem())
+            if (storage.Items[i] is StorageItem storageItem)
             {
-                StorageItem storageItem = (StorageItem)storage.Items[i];
                 itemData.StorageData = ExportStorage(storageItem.Storage);
             }
             
@@ -141,9 +140,8 @@ public class SaveManager : MonoBehaviour
             item.Direction = itemData.Direction;
             item.Size = item.Direction ? new Vector2Int(item.Size.y, item.Size.x) : item.Size;
 
-            if (item.IsStorageItem())
+            if (item is StorageItem storageItem)
             {
-                StorageItem storageItem = (StorageItem)item;
                 storageItem.Storage = ImportStorage(storageData.Items[i].StorageData);
                 storageItem.Storage.Init();
             }

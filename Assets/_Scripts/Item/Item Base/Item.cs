@@ -24,11 +24,6 @@ public class Item: ScriptableObject
     public float ItemWeight;
     public float TotalWeight;
 
-    public bool IsStorageItem()
-    {
-        return GetType() == typeof(StorageItem);
-    }
-
     public void ChangeItemDirection()
     {
         Vector2Int currentSize = Size;

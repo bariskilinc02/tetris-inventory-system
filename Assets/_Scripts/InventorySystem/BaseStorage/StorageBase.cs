@@ -180,6 +180,17 @@ public class StorageBase : MonoBehaviour
 
         foreach (Item item in Storage.Items)
         {
+           // if (this is Inventory storage)
+           // {
+           //     AssingItemToTile(item, item.Size, item.Coordinate);
+           // }
+           // 
+           // if (this is EquipmentStorage equipmentStorage)
+           // {
+           //     AssingItemToTile(item, new Vector2Int(1, 1), item.Coordinate);
+           // }
+            
+            
             if (isExtended)
                 AssingItemToTile(item, new Vector2Int(1, 1), item.Coordinate);
             else
