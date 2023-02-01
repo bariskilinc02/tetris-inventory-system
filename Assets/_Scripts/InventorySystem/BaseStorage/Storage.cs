@@ -76,7 +76,7 @@ public class Storage : IStorage
 
         if (toCoordinate != new Vector2Int(-1, -1))
         {
-            item.Coordinat = toCoordinate;
+            item.Coordinate = toCoordinate;
             AddItem_ToCoordinate(item, toCoordinate);
 
         }
@@ -93,7 +93,7 @@ public class Storage : IStorage
         Debug.Log(toCoordinate);
         if (toCoordinate != new Vector2Int(-1, -1))
         {
-            item.Coordinat = toCoordinate;
+            item.Coordinate = toCoordinate;
             AddItem_ToCoordinate(item, toCoordinate);
 
         }

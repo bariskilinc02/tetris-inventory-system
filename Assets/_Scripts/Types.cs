@@ -9,7 +9,12 @@ public class Types
         Common,
         Storage,
         Weapon,
-   
+    }
 
+    public enum WeaponType
+    {
+        AssaultRifle,
+        Pistol,
+        Melee,
     }
 }

@@ -17,4 +17,10 @@ public static class ItemBehaviour
 
         return true;
     }
+
+    public static T GetItem<T>(Item item) where T : Item, new()
+    {
+        T newItem = (T)item; 
+        return newItem;
+    }
 }

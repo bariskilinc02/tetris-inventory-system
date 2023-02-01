@@ -15,6 +15,8 @@ public class SaveManager : MonoBehaviour
     [SerializeField] private Inventory PrimaryWeapon;
     private const string primaryWeaponId = "primaryWeapon";
 
+    [SerializeField] private Inventory SecondaryWeapon;
+    private const string secondaryWeaponId = "secondaryWeapon";
     private void Awake()
     {
         if(LoadOnStart) LoadGame();
@@ -40,6 +42,7 @@ public class SaveManager : MonoBehaviour
         SaveData<StorageData>(inventoryId, ExportStorage(Inventory.Storage));
         SaveData<StorageData>(storageId, ExportStorage(Storage.Storage));
         SaveData<StorageData>(primaryWeaponId, ExportStorage(PrimaryWeapon.Storage));
+        SaveData<StorageData>(secondaryWeaponId, ExportStorage(SecondaryWeapon.Storage));
     }
 
     private void LoadGame()
@@ -57,6 +60,11 @@ public class SaveManager : MonoBehaviour
         if (PlayerPrefs.HasKey(primaryWeaponId))
         {
             PrimaryWeapon.Storage = ImportStorage(LoadData<StorageData>(primaryWeaponId));
+        }
+
+        if (PlayerPrefs.HasKey(secondaryWeaponId))
+        {
+            SecondaryWeapon.Storage = ImportStorage(LoadData<StorageData>(secondaryWeaponId));
         }
 
     }
@@ -98,7 +106,7 @@ public class SaveManager : MonoBehaviour
             ItemData itemData = new ItemData();
 
             itemData.ItemId = storage.Items[i].Id;
-            itemData.ItemCoordinate = storage.Items[i].Coordinat;
+            itemData.ItemCoordinate = storage.Items[i].Coordinate;
             itemData.Direction = storage.Items[i].Direction;
 
             if (storage.Items[i].IsStorageItem())
@@ -129,7 +137,7 @@ public class SaveManager : MonoBehaviour
             ItemData itemData = storageData.Items[i];
 
             Item item = ItemBehaviour.CreateNewItem(itemData.ItemId);
-            item.Coordinat = itemData.ItemCoordinate;
+            item.Coordinate = itemData.ItemCoordinate;
             item.Direction = itemData.Direction;
             item.Size = item.Direction ? new Vector2Int(item.Size.y, item.Size.x) : item.Size;
 

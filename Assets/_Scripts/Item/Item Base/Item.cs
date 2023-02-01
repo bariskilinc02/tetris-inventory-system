@@ -12,7 +12,7 @@ public class Item: ScriptableObject
     public string Id;
 
     public Vector2Int Size;
-    public Vector2Int Coordinat;
+    public Vector2Int Coordinate;
 
     public Sprite Sprite;
 
@@ -26,14 +26,7 @@ public class Item: ScriptableObject
 
     public bool IsStorageItem()
     {
-        if (GetType() == typeof(StorageItem))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return GetType() == typeof(StorageItem);
     }
 
     public void ChangeItemDirection()

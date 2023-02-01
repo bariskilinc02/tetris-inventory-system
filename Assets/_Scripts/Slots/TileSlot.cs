@@ -7,10 +7,9 @@ public class TileSlot : MonoBehaviour
 {
     public Tile ConnectedTile;
     public StorageBase ConnectedStorage;
-    public Item AssignedItem;
-    public Vector2Int Coordinats;
+    public Vector2Int Coordinates;
 
-    [HideInInspector] public bool isHighLight, isRedLight;
+    [HideInInspector] public bool isHighlight, isRedLight;
     [HideInInspector] public Image Image;
 
     public void SetConnectedStorage(StorageBase storageBase)
@@ -18,9 +17,9 @@ public class TileSlot : MonoBehaviour
         ConnectedStorage = storageBase;
     }
 
-    public void SetConnectWithTiles()
+    public void ConnectToTile()
     {
-        ConnectedTile = ConnectedStorage.Tiles.Find(x => x.Coordinats == Coordinats);
+        ConnectedTile = ConnectedStorage.Tiles.Find(x => x.Coordinats == Coordinates);
     }
 
     private void Awake()
@@ -30,7 +29,7 @@ public class TileSlot : MonoBehaviour
 
     private void Update()
     {
-        if (isHighLight) UpdateColor(Color.green);
+        if (isHighlight) UpdateColor(Color.green);
         else if (isRedLight) UpdateColor(Color.red);
         else UpdateColor(Color.black);
     }
@@ -38,7 +37,7 @@ public class TileSlot : MonoBehaviour
     private void UpdateColor(Color color)
     {
         Image.color = color;
-        isHighLight = false;
+        isHighlight = false;
         isRedLight = false;
     }
 }
