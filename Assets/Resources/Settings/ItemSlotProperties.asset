@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ccd37c0b285af04d9a4add34c7f12c6, type: 3}
   m_Name: ItemSlotProperties
   m_EditorClassIdentifier: 
-  DefaultColor: {r: 0, g: 0, b: 0, a: 0}
-  HighligtedColor: {r: 0, g: 0, b: 0, a: 0}
-  RedColor: {r: 0, g: 0, b: 0, a: 0}
-  StorageColor: {r: 0, g: 0, b: 0, a: 0}
-  ModColor: {r: 0, g: 0, b: 0, a: 0}
-  MagazineColor: {r: 0, g: 0, b: 0, a: 0}
-  BulletColor: {r: 0, g: 0, b: 0, a: 0}
+  DefaultColor: {r: 0.29411766, g: 0.29411766, b: 0.29411766, a: 0.9372549}
+  HighligtedColor: {r: 0.32921574, g: 0.5660378, b: 0.1463154, a: 0.9372549}
+  RedColor: {r: 0.4528302, g: 0.11278034, b: 0.11278034, a: 0.9372549}
+  WeaponColor: {r: 0.29411766, g: 0.29411766, b: 0.29411766, a: 0.9372549}
+  StorageColor: {r: 0.1481488, g: 0.24849765, b: 0.2735849, a: 1}
+  ModColor: {r: 0.3490566, g: 0.2923666, b: 0.103399776, a: 0.9372549}
+  MagazineColor: {r: 0.41509432, g: 0.39555168, b: 0.10729794, a: 0.9372549}
+  BulletColor: {r: 0.41568628, g: 0.39607844, b: 0.105882354, a: 0.9372549}
