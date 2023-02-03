@@ -26,6 +26,7 @@ MonoBehaviour:
   ModType: 8
   CompatibleItems:
   - {fileID: 11400000, guid: 2bd4940ea0f04f34b8d9671c63b6c749, type: 2}
+  SubModItems: []
   MagazineSize: 30
   Bullets: []
   BulletType: 0

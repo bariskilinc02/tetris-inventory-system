@@ -117,6 +117,11 @@ public class SaveManager : MonoBehaviour
             {
                 itemData.SubData = ExportSubData(weaponItem.SubModItems);
             }
+            
+            if (storage.Items[i] is ModItem modItem)
+            {
+                itemData.SubData = ExportSubData(modItem.SubModItems);
+            }
 
             if (storage.Items[i] is MagazineItem magazineItem)
             {
@@ -147,6 +152,11 @@ public class SaveManager : MonoBehaviour
                 itemData.ItemId = subModItems[i].ModItem.Id;
                 itemData.ItemCoordinate = subModItems[i].ModItem.Coordinate;
                 itemData.Direction = subModItems[i].ModItem.Direction;
+
+                if (subModItems[i].ModItem is ModItem modItem)
+                {
+                    itemData.SubData = ExportSubData(modItem.SubModItems);
+                }
             }
 
 
@@ -199,6 +209,10 @@ public class SaveManager : MonoBehaviour
                 weaponItem.SubModItems = ImportSubData(itemData.SubData, weaponItem.SubModItems);
             }
             
+            if (item is ModItem modItem)
+            {
+                modItem.SubModItems = ImportSubData(itemData.SubData, modItem.SubModItems);
+            }
             if (item is MagazineItem magazineItem)
             {
                 magazineItem.Bullets = ImportMagazine(itemData.MagazineData);
@@ -224,6 +238,10 @@ public class SaveManager : MonoBehaviour
             {
                 Item item = ItemBehaviour.CreateNewItem(subData.SubItems[i].ItemId);
 
+                if (item is ModItem modItem)
+                {
+                    modItem.SubModItems = ImportSubData(subData.SubItems[i].SubData, modItem.SubModItems);
+                }
                 subModItems[i].ModItem = item;
             }
         }

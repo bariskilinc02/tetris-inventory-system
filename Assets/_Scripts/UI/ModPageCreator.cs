@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WeaponPageCreator : MonoBehaviour
+public class ModPageCreator : MonoBehaviour
 {
-    public static WeaponPageCreator Instance;
+    public static ModPageCreator Instance;
 
     public Item CurrentItem;
     
@@ -19,7 +19,7 @@ public class WeaponPageCreator : MonoBehaviour
     
     [Header("Page")]
     public GameObject Page;
-    public Button CloseButton;
+    public Button CloseButton; 
     
     public GameObject ScrollView;
     public GameObject ItemSlots;
@@ -48,7 +48,7 @@ public class WeaponPageCreator : MonoBehaviour
         GetItem(item);
         CreateFrame();
         SetStorageComponents();
-
+     
         CreateTileSlots();
         CreateItemSlots();
     }
@@ -77,7 +77,7 @@ public class WeaponPageCreator : MonoBehaviour
     public void CreateTileSlots()
     {
         TileSlots.Clear();
-        if (CurrentItem is WeaponItem weaponItem)
+        if (CurrentItem is ModItem weaponItem)
         {
             for (int i = 0; i < weaponItem.SubModItems.Count; i++)
             {
@@ -93,10 +93,12 @@ public class WeaponPageCreator : MonoBehaviour
     
     public void CreateItemSlots()
     {
-        if (CurrentItem is WeaponItem weaponItem)
+    
+        if (CurrentItem is ModItem weaponItem)
         {
             for (int i = 0; i < weaponItem.SubModItems.Count; i++)
             {
+               
                 if (weaponItem.SubModItems[i].ModItem != null)
                 {
                     GameObject itemSlotGameObject = Instantiate(ItemSlotPrefab, Tiles.transform);
@@ -115,10 +117,5 @@ public class WeaponPageCreator : MonoBehaviour
     {
         CurrentItem = null;
         Destroy(Page);
-    }
-
-    public void RefreshPage()
-    {
-        
     }
 }

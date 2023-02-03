@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Magazine Item", menuName = "ScriptableObjects/Magazine Item", order = 1)]
 public class MagazineItem : ModItem
 {
+    [Header("Magazine")]
     public int MagazineSize;
     public List<Item> Bullets;
     public Types.BulletType BulletType;

@@ -8,6 +8,7 @@ TagManager:
   - ItemSlot
   - CellSlot
   - SingleTileSlot
+  - MovablePage
   layers:
   - Default
   - TransparentFX

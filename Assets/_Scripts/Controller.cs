@@ -181,6 +181,14 @@ public class Controller : MonoBehaviour
                 }
              
             }
+            else if (currentItemSlot.AssignedItem is ModItem modItem)
+            {
+                if (modItem.CheckItemIsCompatible(CurrentMovingItem.AssignedItem,out SubModItem subModItem))
+                {
+                    currentItemSlot.HighlightItem();
+                }
+             
+            }
         }
         else
         {
@@ -321,6 +329,21 @@ public class Controller : MonoBehaviour
                 }
             
             }
+            else if (currentItem is ModItem modItem and not MagazineItem and not BulletItem)
+            {
+                if (modItem.CheckItemIsCompatible(CurrentMovingItem.AssignedItem, out SubModItem subModItem))
+                {
+                    subModItem.ModItem = CurrentMovingItem.AssignedItem;
+                    CurrentMovingItem.ConnectedSingleTileSlot = currentSingleTileSlot;
+                    CurrentMovingItem.ConnectedStorage = null;
+                    Destroy(CurrentMovingItem.gameObject); 
+                    isItemMoving = false;
+                }
+                else
+                {
+                    RestoreItemSlot(CurrentMovingItem);
+                }
+            }
             else if (currentItem is MagazineItem magazineItem && CurrentMovingItem.AssignedItem is BulletItem bulletItem)
             {
                 magazineItem.LoadAllBullet(bulletItem);
@@ -450,6 +473,13 @@ public class Controller : MonoBehaviour
         {
             WeaponPageCreator.Instance.Create(item);
         }
+        
+        if (item is ModItem modItem)
+        {
+            if(modItem.SubModItems.Count == 0) return;
+            
+            ModPageCreator.Instance.Create(item);
+        }
     }
 
     private void RestoreItemSlotVisual(ItemSlot itemSlot, bool? isOverride = null)
@@ -467,7 +497,7 @@ public class Controller : MonoBehaviour
         }
         else
         {
-            if (itemSlot.ConnectedStorage == null)
+            if (itemSlot.ConnectedStorage == null && itemSlot.ConnectedSingleTileSlot != null)
             {
                 itemSlot.FitVisual(itemSlot.ConnectedSingleTileSlot);
             }
