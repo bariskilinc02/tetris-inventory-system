@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -88,7 +87,7 @@ public class SaveManager : MonoBehaviour
     public T LoadData<T>(string key)
     {
         string gameDataJson = PlayerPrefs.GetString(key);
-        Debug.Log(gameDataJson);
+       // Debug.Log(gameDataJson);
         return DataBehaviour.DeSerialize<T>(gameDataJson);
     }
 
@@ -113,7 +112,16 @@ public class SaveManager : MonoBehaviour
             {
                 itemData.StorageData = ExportStorage(storageItem.Storage);
             }
-            
+
+            if (storage.Items[i] is WeaponItem weaponItem)
+            {
+                itemData.SubData = ExportSubData(weaponItem.SubModItems);
+            }
+
+            if (storage.Items[i] is MagazineItem magazineItem)
+            {
+                itemData.MagazineData = ExportMagazineData(magazineItem);
+            }
 
             storageData.Items.Add(itemData);
         }
@@ -121,6 +129,46 @@ public class SaveManager : MonoBehaviour
 
         return storageData;
     
+    }
+
+    private SubData ExportSubData(List<SubModItem> subModItems)
+    {
+        SubData subData = new SubData();
+        for (int i = 0; i < subModItems.Count; i++)
+        {
+            ItemData itemData = new ItemData();
+
+            if (subModItems[i].ModItem == null)
+            {
+                itemData.ItemId = "null";
+            }
+            else
+            {
+                itemData.ItemId = subModItems[i].ModItem.Id;
+                itemData.ItemCoordinate = subModItems[i].ModItem.Coordinate;
+                itemData.Direction = subModItems[i].ModItem.Direction;
+            }
+
+
+            subData.SubItems.Add(itemData);
+        }
+
+        return subData;
+    }
+
+    private MagazineData ExportMagazineData(MagazineItem magazineItem)
+    {
+        MagazineData magazineData = new MagazineData();
+
+        for (int i = 0; i < magazineItem.Bullets.Count; i++)
+        {
+            ItemData itemData = new ItemData();
+
+            itemData.ItemId = magazineItem.Bullets[i].Id;
+            magazineData.Bullets.Add(itemData);
+        }
+
+        return magazineData;
     }
     #endregion
 
@@ -146,12 +194,53 @@ public class SaveManager : MonoBehaviour
                 storageItem.Storage.Init();
             }
 
+            if (item is WeaponItem weaponItem)
+            {
+                weaponItem.SubModItems = ImportSubData(itemData.SubData, weaponItem.SubModItems);
+            }
+            
+            if (item is MagazineItem magazineItem)
+            {
+                magazineItem.Bullets = ImportMagazine(itemData.MagazineData);
+            }
+
             storage.Items.Add(item);
         }
 
 
         return storage;
 
+    }
+
+    private List<SubModItem> ImportSubData(SubData subData, List<SubModItem> subModItems)
+    {
+        for (int i = 0; i < subModItems.Count; i++)
+        {
+            if (subData.SubItems[i].ItemId == "null")
+            {
+                continue;
+            }
+            else
+            {
+                Item item = ItemBehaviour.CreateNewItem(subData.SubItems[i].ItemId);
+
+                subModItems[i].ModItem = item;
+            }
+        }
+        return subModItems;
+    }
+
+    private List<Item> ImportMagazine(MagazineData magazineData)
+    {
+        List<Item> Bullets = new List<Item>();
+        for (int i = 0; i < magazineData.Bullets.Count; i++)
+        {
+            Item item = ItemBehaviour.CreateNewItem(magazineData.Bullets[i].ItemId);
+            
+            Bullets.Add(item);
+        }
+
+        return Bullets;
     }
     #endregion
 }

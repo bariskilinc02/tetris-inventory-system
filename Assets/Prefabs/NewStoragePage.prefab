@@ -130,6 +130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsFixed: 0
+  isExtended: 0
+  AvailableItemTypes: 
   ConnectedItem: {fileID: 0}
   TargetTileMap: {fileID: 1690983942937919251}
   TargetItemSlots: {fileID: 1690983943250173485}
@@ -139,8 +141,6 @@ MonoBehaviour:
     _tiles: []
   TileSlots: []
   Tiles: []
-  _isConnectedToTarget: 0
-  _isStorageUIUpdated: 0
   ItemSlotPrefab: {fileID: 5790091416435712972, guid: d002a06244b9ea64e9f3aaaf9a7149f6,
     type: 3}
 --- !u!1 &1690983942234354461
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690983943234998682}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 

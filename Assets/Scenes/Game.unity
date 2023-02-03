@@ -2141,7 +2141,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -5260,7 +5260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ConnectedInventory: {fileID: 166296005}
   ItemBase: {fileID: 0}
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: 594ec0ab5a6da8d4abd381cae9209f7a, type: 2}
 --- !u!4 &669227215
 Transform:
   m_ObjectHideFlags: 0
@@ -8804,6 +8804,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2104159722}
+  - {fileID: 1771637470}
   m_Father: {fileID: 1911829668}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10120,7 +10121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsFixed: 1
   isExtended: 1
-  AvailableItemTypes: 02000000
+  AvailableItemTypes: 05000000
   ConnectedItem: {fileID: 0}
   TargetTileMap: {fileID: 915860019}
   TargetItemSlots: {fileID: 795015598}
@@ -15019,6 +15020,64 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1765553767}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1771637469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1771637470}
+  - component: {fileID: 1771637471}
+  m_Layer: 0
+  m_Name: WeaponPageCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1771637470
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771637469}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1072264512}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1771637471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771637469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 666520b226f99404d8b3624b5d090ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentItem: {fileID: 0}
+  UIParent: {fileID: 222758746}
+  WeaponPage: {fileID: 1690983941833656675, guid: 50a40d02d24346144bee9af4f2af27c5,
+    type: 3}
+  SingleTileSlot: {fileID: 1758355921604572336, guid: 7db83f7dd3c08dc4786117960e72bc40,
+    type: 3}
+  ItemSlotPrefab: {fileID: 5790091416435712972, guid: d002a06244b9ea64e9f3aaaf9a7149f6,
+    type: 3}
+  Page: {fileID: 0}
+  CloseButton: {fileID: 0}
+  ScrollView: {fileID: 0}
+  ItemSlots: {fileID: 0}
+  Tiles: {fileID: 0}
+  TileSlots: []
 --- !u!1 &1784821961
 GameObject:
   m_ObjectHideFlags: 0
@@ -15731,7 +15790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsFixed: 1
   isExtended: 1
-  AvailableItemTypes: 02000000
+  AvailableItemTypes: 05000000
   ConnectedItem: {fileID: 0}
   TargetTileMap: {fileID: 98918774}
   TargetItemSlots: {fileID: 1755524552}

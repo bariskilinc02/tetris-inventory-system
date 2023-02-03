@@ -32,6 +32,8 @@ public class TileSlot : MonoBehaviour
         if (isHighlight) UpdateColor(Color.green);
         else if (isRedLight) UpdateColor(Color.red);
         else UpdateColor(Color.black);
+        
+        
     }
 
     private void UpdateColor(Color color)
@@ -40,4 +42,5 @@ public class TileSlot : MonoBehaviour
         isHighlight = false;
         isRedLight = false;
     }
+
 }

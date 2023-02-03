@@ -18,7 +18,24 @@ public class Item: ScriptableObject
 
     public bool Direction;
 
-    public int Quantity;
+    [SerializeField] private int quantity;
+    public int Quantity
+    {
+        get => quantity;
+        set
+        {
+            if (value == 0)
+            {
+                quantity = 0;
+                Destroy(this);
+            }
+            else
+            {
+                quantity = value;   
+            }
+        }
+    }
+
     public int MaxQuantity;
 
     public float ItemWeight;

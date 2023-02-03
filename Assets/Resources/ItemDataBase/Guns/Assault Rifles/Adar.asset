@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 238f62da66f7f934eb5d2912db9a1de6, type: 3}
-  m_Name: Akm
+  m_Name: Adar
   m_EditorClassIdentifier: 
-  ItemType: 2
-  Name: Akm
-  Id: akm
-  Size: {x: 3, y: 1}
-  Coordinat: {x: 0, y: 0}
-  Sprite: {fileID: 21300000, guid: e92d0ad3e28491a4b8d8629051606a19, type: 3}
+  ItemType: 5
+  Name: Adar
+  Id: adar
+  Size: {x: 4, y: 2}
+  Coordinate: {x: 0, y: 0}
+  Sprite: {fileID: 21300000, guid: 3ddf0388128ec2a4d95bf34e26a26c35, type: 3}
   Direction: 0
   Quantity: 0
-  MaxQuantity: 0
-  ItemWeight: 0
+  MaxQuantity: 1
+  ItemWeight: 1
   TotalWeight: 0

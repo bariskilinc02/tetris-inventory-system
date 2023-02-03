@@ -52,11 +52,7 @@ public class StorageBase : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            AddItem_Auto("chest");
-        }
-
+        
         if (_isConnectedToTarget == false)
         {
             if (TargetTileMap != null)
@@ -66,8 +62,11 @@ public class StorageBase : MonoBehaviour
                 _isConnectedToTarget = true;
             }
         }
-    }
 
+        Storage.ControlStorage();
+    }
+    
+    
     #region OnAwake
     /// <summary>
     /// Setup tiles linked to inventory
@@ -410,7 +409,7 @@ public class StorageBase : MonoBehaviour
     {
         ItemSlot itemSlot = CreateItemSlot(item.Id, item.Coordinate);
 
-        SetItemsSlotSprite(itemSlot);
+        itemSlot.UpdateImage();
         if (isExtended)
         {
             SynchTileSlotInItemSlot(itemSlot, item.Coordinate);
@@ -474,7 +473,7 @@ public class StorageBase : MonoBehaviour
             if (_isConnectedToTarget)
             {
                 ItemSlot itemSlot = CreateItemSlot(id, toCoordinate);
-                SetItemsSlotSprite(itemSlot);
+                itemSlot.UpdateImage();
 
                 SynchTileSlotsInItemSlot(itemSlot, toCoordinate);
                 itemSlot.ChangeDirection();

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StoragePageCreator : MonoBehaviour
 {
-    public static StoragePageCreator Instace;
+    public static StoragePageCreator Instance;
 
     #region Components
     [Header("Parents")]
@@ -40,7 +40,7 @@ public class StoragePageCreator : MonoBehaviour
 
     private void Awake()
     {
-        Instace = this;
+        Instance = this;
     }
 
     public void GetStorageFromItem(Item item)

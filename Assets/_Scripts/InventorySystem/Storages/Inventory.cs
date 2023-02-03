@@ -9,7 +9,7 @@ public class Inventory: StorageBase, IAddable
     public void AddItem(ItemSlot itemSlot, TileSlot tileSlot, out bool isAdded)
     {
         
-        if (itemSlot.AssignedItem == StoragePageCreator.Instace.CurrentItem)
+        if (itemSlot.AssignedItem == StoragePageCreator.Instance.CurrentItem)
         {
             isAdded = false;
         }

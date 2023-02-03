@@ -102,6 +102,15 @@ public class Storage : IStorage
     #endregion
 
     #region Control
+
+    public void ControlStorage()
+    {
+        if (Items.Exists(x => x == null))
+        {
+            Item tempItem = Items.Find(x => x == null);
+            Items.Remove(tempItem);
+        }
+    }
     public bool IsExistEmptyTileArea(Vector2Int itemSize)
     {
         Vector2Int tempCoordinate = new Vector2Int();

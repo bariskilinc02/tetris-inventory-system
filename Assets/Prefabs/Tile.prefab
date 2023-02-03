@@ -94,9 +94,8 @@ MonoBehaviour:
     Coordinats: {x: 0, y: 0}
     TileSlot: {fileID: 0}
   ConnectedStorage: {fileID: 0}
-  AssignedItem: {fileID: 0}
-  Coordinats: {x: 0, y: 0}
-  isHighLight: 0
+  Coordinates: {x: 0, y: 0}
+  isHighlight: 0
   isRedLight: 0
   Image: {fileID: 0}
 --- !u!222 &7432602789120729180
@@ -127,7 +126,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f83eea89300e52b4a9cd5fa53928f4a1, type: 3}
+  m_Sprite: {fileID: -1869252568, guid: 34ac9f0eab943b148b461f9f76a4628f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

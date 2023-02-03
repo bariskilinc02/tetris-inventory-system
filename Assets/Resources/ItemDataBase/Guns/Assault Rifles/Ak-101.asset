@@ -9,17 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 238f62da66f7f934eb5d2912db9a1de6, type: 3}
-  m_Name: M4A1
+  m_Script: {fileID: 11500000, guid: b6ed44f5fba293842a9aa55358c21a14, type: 3}
+  m_Name: Ak-101
   m_EditorClassIdentifier: 
-  ItemType: 2
-  Name: M4A1
-  Id: m4a1
+  ItemType: 5
+  Name: Ak-101
+  Id: ak101
   Size: {x: 4, y: 2}
   Coordinate: {x: 0, y: 0}
-  Sprite: {fileID: 21300000, guid: ba35a59c71f3eee4fa962b6f83a2b649, type: 3}
+  Sprite: {fileID: 0}
   Direction: 0
   Quantity: 0
-  MaxQuantity: 1
-  ItemWeight: 1
+  MaxQuantity: 0
+  ItemWeight: 0
   TotalWeight: 0
+  SubModItems:
+  - AvailableTypes: 04000000
+    ModItem: {fileID: 0}
+  - AvailableTypes: 03000000
+    ModItem: {fileID: 0}
+  - AvailableTypes: 050000000700000006000000
+    ModItem: {fileID: 0}

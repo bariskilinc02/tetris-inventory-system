@@ -16,6 +16,7 @@ public class EquipmentStorage : StorageBase, IAddable
 
                 tileSlot.ConnectedStorage.ReplaceItemSlot(itemSlot, tileSlot.ConnectedTile);
                 tileSlot.ConnectedStorage.SynchTileSlotInItemSlot(itemSlot, tileSlot.Coordinates);
+                itemSlot.ConnectedSingleTileSlot = null;
 
                 isAdded = true;
             }
