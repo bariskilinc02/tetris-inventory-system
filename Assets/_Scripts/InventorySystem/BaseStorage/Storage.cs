@@ -9,6 +9,8 @@ public class Storage : IStorage
     [SerializeField] private List<Item> _items = new List<Item>();
     [SerializeField] private List<Tile> _tiles = new List<Tile>();
 
+    public bool isStorageUpdated;
+
     public Vector2Int TileSize
     {
         get => _tileSize;
@@ -18,7 +20,11 @@ public class Storage : IStorage
     public List<Item> Items
     {
         get => _items;
-        set => _items = value;
+        set
+        {
+            _items = value;
+            isStorageUpdated = true;
+        }
     }
 
     public List<Tile> Tiles
@@ -109,6 +115,7 @@ public class Storage : IStorage
         {
             Item tempItem = Items.Find(x => x == null);
             Items.Remove(tempItem);
+            isStorageUpdated = true;
         }
     }
     public bool IsExistEmptyTileArea(Vector2Int itemSize)
@@ -185,8 +192,28 @@ public class Storage : IStorage
         }
 
         Items.Add(item); 
+        isStorageUpdated = true;
         //Tiles.Find(x => x.Coordinats.x == coordinate.x && x.Coordinats.y == coordinate.y).ConnectedStorage.Storage.Items.Add(item);
 
     }
+    
+    public void RefreshTileIndexes()
+    {
+        for (int a = 0; a < Items.Count; a++)
+        {
+            Vector2Int pivotPosition = Items[a].Coordinate;
+
+            for (int i = 0; i < Items[a].Size.x; i++)
+            {
+                for (int l = 0; l < Items[a].Size.y; l++)
+                {
+                    Tile slot = Tiles.Find(x => x.Coordinats.x == pivotPosition.x + i && x.Coordinats.y == pivotPosition.y + l); //currentSlot.ConnectedStorage.ItemSlots.Find(x => x.Coordinats.x == currentSlot.Coordinats.x + i && x.Coordinats.y == currentSlot.Coordinats.y + l);
+                    slot.AssignedItem = Items[a];
+                }
+            }
+        }
+    }
     #endregion
+    
+    
 }

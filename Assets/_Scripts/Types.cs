@@ -16,9 +16,17 @@ public class Types
         Storage,
         Bag,
         Vest,
-        Armor,
+        BodyArmor,
         Weapon,
         Mod,
+        HeadWear,
+        Pistol,
+        Melee,
+        Heal,
+        Food,
+        Drink,
+        Barter,
+        Ammunition,
         
     }
    

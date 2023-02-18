@@ -48,4 +48,9 @@ public class Item: ScriptableObject
 
         Size = new Vector2Int(currentSize.y, currentSize.x);
     }
+
+    public virtual float GetTotalWeight()
+    {
+        return ItemWeight;
+    }
 }

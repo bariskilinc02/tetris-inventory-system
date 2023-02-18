@@ -9,6 +9,7 @@ TagManager:
   - CellSlot
   - SingleTileSlot
   - MovablePage
+  - MainCanvas
   layers:
   - Default
   - TransparentFX

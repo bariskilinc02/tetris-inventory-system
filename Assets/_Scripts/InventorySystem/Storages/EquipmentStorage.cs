@@ -5,12 +5,16 @@ using UnityEngine;
 
 public class EquipmentStorage : StorageBase, IAddable
 {
-    
+    public TileSlot connectedTileSlot;
     public void AddItem(ItemSlot itemSlot, TileSlot tileSlot, out bool isAdded)
     {
         if (tileSlot.ConnectedStorage.AvailableItemTypes.Exists(x => x == itemSlot.AssignedItem.ItemType))
         {
-            if (tileSlot.ConnectedStorage.IsEmptyTileArea(new Vector2Int(1, 1), new Vector2Int(0, 0)))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
+            if (itemSlot.AssignedItem is StorageItem storageItem && storageItem.IsSubItem(tileSlot.ConnectedStorage.ConnectedItem))
+            {
+                isAdded = false;
+            }
+            else if (tileSlot.ConnectedStorage.IsEmptyTileArea(new Vector2Int(1, 1), new Vector2Int(0, 0)))//if (IsTileAreaEmptyForItem(CurrentMovingItem.AssignedItem, _currentSlot))
             {
                 tileSlot.ConnectedStorage.SetItemToEmptyTile(itemSlot.AssignedItem, tileSlot.ConnectedTile);
 

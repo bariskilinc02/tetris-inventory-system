@@ -8,11 +8,13 @@ public class Controller : MonoBehaviour
 {
     public static Controller Instance;
 
+    public GameObject Canvas;
+    
     private TileSlot _currentTileSlot;
     private SingleTileSlot currentSingleTileSlot;
     public ItemSlot CurrentMovingItem;
 
-    private GraphicRaycaster m_Raycaster;
+    [SerializeField] private GraphicRaycaster m_Raycaster;
     private PointerEventData m_PointerEventData;
     private EventSystem m_EventSystem;
 
@@ -32,7 +34,7 @@ public class Controller : MonoBehaviour
     void Start()
     {
         m_EventSystem = EventSystem.current;
-        m_Raycaster = FindObjectOfType<GraphicRaycaster>();
+        m_Raycaster = GameObject.FindWithTag("MainCanvas").GetComponent<GraphicRaycaster>();
         m_PointerEventData = new PointerEventData(m_EventSystem);
     }
 
@@ -73,6 +75,10 @@ public class Controller : MonoBehaviour
 
             OpenStoragePage(clickedItemSlot.AssignedItem);
         }
+        else
+        {
+            RightClickMenu.Instance.CloseMenu();
+        }
 
     }
 
@@ -84,69 +90,100 @@ public class Controller : MonoBehaviour
 
         List<RaycastResult> results = SendRay();
 
-        if (results.Count < 1) return;
-        if (results[0].gameObject.CompareTag("ItemSlot"))
-        {
-            CurrentMovingItem = results[0].gameObject.GetComponent<ItemSlot>();
-            CurrentMovingItem.GetComponent<Image>().raycastTarget = false;
+        GameObject onMouseObjectGameObject = results[0].gameObject;
 
-            if (CurrentMovingItem.ConnectedStorage == null)
+        if (results.Count < 1) return;
+        if (onMouseObjectGameObject.GetComponent<ItemSlot>() != null)
+        {
+            CurrentMovingItem = onMouseObjectGameObject.GetComponent<ItemSlot>();
+
+            if (CurrentMovingItem is TraderItemSlot)
             {
-                CurrentMovingItem.ConnectedSingleTileSlot.ConnectedSubItem.ModItem = null;
+                TradeManager.Instance.Buy(CurrentMovingItem);
+                RightClickMenu.Instance.CloseMenu();
             }
             else
             {
-                CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
-            }
-     
-            CurrentMovingItem.FixVisual();
+                CurrentMovingItem.GetComponent<Image>().raycastTarget = false;
+
             
-            isItemMoving = true;
-            RestoreItemSlotVisual(CurrentMovingItem, false);
+                if (CurrentMovingItem.ConnectedStorage == null)
+                {
+                    CurrentMovingItem.ConnectedSingleTileSlot.ConnectedSubItem.ModItem = null;
+                }
+                else
+                {
+                    CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
+                }
+     
+                CurrentMovingItem.FixVisual();
+            
+                isItemMoving = true;
+                CurrentMovingItem.transform.parent = Canvas.transform;
+                RestoreItemSlotVisual(CurrentMovingItem, false);
+            
+                RightClickMenu.Instance.CloseMenu();
+            }
+        }
+        else
+        {
+            RightClickMenu.Instance.CloseMenu();
         }
     }
 
+    //Update on mouse slots if item moving 
     private void IfMouseOnSlot()
     {
         List<RaycastResult> results  = SendRay();
 
         if (results.Count < 1) return;
 
+        GameObject onMouseObjectGameObject = results[0].gameObject;
+        
+        //Tile Slot
         if (results[0].gameObject.CompareTag("TileSlot"))
         {
             _currentTileSlot = results[0].gameObject.GetComponent<TileSlot>();
 
-            if (CurrentMovingItem.AssignedItem == StoragePageCreator.Instance.CurrentItem)
+            if (_currentTileSlot.ConnectedStorage.IsAvailableItem(CurrentMovingItem.AssignedItem))
             {
-                isAreaEmpty = false;
+                if (CurrentMovingItem.AssignedItem is StorageItem storageItem && storageItem.IsSubItem(_currentTileSlot.ConnectedStorage.ConnectedItem))
+                {
+                    isAreaEmpty = false;
+                }
+                else
+                {
+                    if (_currentTileSlot.ConnectedStorage.isExtended == false)
+                    {
+                        isAreaEmpty = _currentTileSlot.ConnectedStorage.IsEmptyTileArea(CurrentMovingItem.AssignedItem.Size, _currentTileSlot.Coordinates);
+                    }
+                    else if (_currentTileSlot.ConnectedStorage.isExtended == true)
+                    {
+                        if (_currentTileSlot.ConnectedStorage.AvailableItemTypes.Exists(x => x == CurrentMovingItem.AssignedItem.ItemType))
+                        {
+                            isAreaEmpty = _currentTileSlot.ConnectedStorage.IsEmptyTile(_currentTileSlot.Coordinates);
+                        }
+                        else
+                        {
+                            isAreaEmpty = false;
+                        }
+      
+                    }
+                
+                }
             }
             else
             {
-                if (_currentTileSlot.ConnectedStorage.isExtended == false)
-                {
-                    isAreaEmpty = _currentTileSlot.ConnectedStorage.IsEmptyTileArea(CurrentMovingItem.AssignedItem.Size, _currentTileSlot.Coordinates);
-                }
-                else if (_currentTileSlot.ConnectedStorage.isExtended == true)
-                {
-                    if (_currentTileSlot.ConnectedStorage.AvailableItemTypes.Exists(x => x == CurrentMovingItem.AssignedItem.ItemType))
-                    {
-                        isAreaEmpty = _currentTileSlot.ConnectedStorage.IsEmptyTile(_currentTileSlot.Coordinates);
-                    }
-                    else
-                    {
-                        isAreaEmpty = false;
-                    }
-      
-                }
-                
+                isAreaEmpty = false;
             }
+            
 
             if (isAreaEmpty) _currentTileSlot.ConnectedStorage.UpdateTileSlotHighlight(CurrentMovingItem.AssignedItem.Size, _currentTileSlot.Coordinates, true);
             else _currentTileSlot.ConnectedStorage.UpdateTileSlotHighlight(CurrentMovingItem.AssignedItem.Size, _currentTileSlot.Coordinates, false);
 
         }
-
-        if (results[0].gameObject.CompareTag("SingleTileSlot"))
+        //Single Tile Slot
+        else if (results[0].gameObject.CompareTag("SingleTileSlot"))
         {
             currentSingleTileSlot = results[0].gameObject.GetComponent<SingleTileSlot>();
 
@@ -161,34 +198,56 @@ public class Controller : MonoBehaviour
           
           
         }
-        else if (results[0].gameObject.CompareTag("ItemSlot"))
+        //Item Slot
+        else if (onMouseObjectGameObject.GetComponent<ItemSlot>() != null)
         {
+            
             ItemSlot currentItemSlot = results[0].gameObject.GetComponent<ItemSlot>();
 
-            if (currentItemSlot.AssignedItem is StorageItem storageItem)
+            if (currentItemSlot is TraderItemSlot)
             {
-                if ( storageItem.Storage.IsExistEmptyTileArea(CurrentMovingItem.AssignedItem.Size) ||
-                     storageItem.Storage.IsExistEmptyTileArea(new Vector2Int(CurrentMovingItem.AssignedItem.Size.y, CurrentMovingItem.AssignedItem.Size.x )) )
-                {
-                    currentItemSlot.HighlightItem();
-                }
+                
             }
-            else if (currentItemSlot.AssignedItem is WeaponItem weaponItem)
+            else
             {
-                if (weaponItem.CheckItemIsCompatible(CurrentMovingItem.AssignedItem,out SubModItem subModItem))
+                if (currentItemSlot.AssignedItem is StorageItem storageItem)
                 {
-                    currentItemSlot.HighlightItem();
+                    if (!storageItem.isAvailable(CurrentMovingItem.AssignedItem))
+                    {
+                        currentItemSlot.RedLightItem();
+                    }
+                    else
+                    {
+                        if (CurrentMovingItem.AssignedItem is StorageItem _storageItem && _storageItem.IsSubItem(currentItemSlot.AssignedItem) )
+                        {
+                            currentItemSlot.RedLightItem();
+                        }
+                        else if ( storageItem.Storage.IsExistEmptyTileArea(CurrentMovingItem.AssignedItem.Size) ||
+                                  storageItem.Storage.IsExistEmptyTileArea(new Vector2Int(CurrentMovingItem.AssignedItem.Size.y, CurrentMovingItem.AssignedItem.Size.x )) )
+                        {
+                            currentItemSlot.HighlightItem();
+                        }
+                    }
                 }
+                else if (currentItemSlot.AssignedItem is WeaponItem weaponItem)
+                {
+                    if (weaponItem.CheckItemIsCompatible(CurrentMovingItem.AssignedItem,out SubModItem subModItem))
+                    {
+                        currentItemSlot.HighlightItem();
+                    }
              
-            }
-            else if (currentItemSlot.AssignedItem is ModItem modItem)
-            {
-                if (modItem.CheckItemIsCompatible(CurrentMovingItem.AssignedItem,out SubModItem subModItem))
-                {
-                    currentItemSlot.HighlightItem();
                 }
+                else if (currentItemSlot.AssignedItem is ModItem modItem)
+                {
+                    if (modItem.CheckItemIsCompatible(CurrentMovingItem.AssignedItem,out SubModItem subModItem))
+                    {
+                        currentItemSlot.HighlightItem();
+                    }
              
+                }
             }
+            
+           
         }
         else
         {
@@ -204,6 +263,7 @@ public class Controller : MonoBehaviour
 
     }
 
+    //Trigger when item stop moving
     private void IsMouseEndUp()
     {
         if (!Input.GetMouseButtonUp(0) || !isItemMoving) return;
@@ -211,7 +271,9 @@ public class Controller : MonoBehaviour
         List<RaycastResult> results = SendRay();
         
         if (results.Count < 1) return;
-
+            
+        GameObject onMouseObjectGameObject = results[0].gameObject;
+        
         if (results[0].gameObject.CompareTag("TileSlot"))
         {
             _currentTileSlot = results[0].gameObject.GetComponent<TileSlot>();
@@ -223,7 +285,8 @@ public class Controller : MonoBehaviour
             }
 
             bool isAdded = false;
-            
+
+           
             if (_currentTileSlot.ConnectedStorage is Inventory currentInventory)
             {
                 currentInventory.AddItem(CurrentMovingItem, _currentTileSlot, out isAdded);
@@ -264,7 +327,7 @@ public class Controller : MonoBehaviour
                 currentSingleTileSlot.ConnectedSubItem.ModItem = CurrentMovingItem.AssignedItem;
 
                 CurrentMovingItem.ConnectToSingleTileSlot(currentSingleTileSlot);
-                CurrentMovingItem.FitVisual(currentSingleTileSlot);
+                CurrentMovingItem.FitVisualSingleTileSlot(currentSingleTileSlot);
 
                 isItemMoving = false;
                 CurrentMovingItem.GetComponent<Image>().raycastTarget = true;
@@ -274,42 +337,58 @@ public class Controller : MonoBehaviour
                 RestoreItemSlot(CurrentMovingItem);
             }
         }
-        else if (results[0].gameObject.CompareTag("ItemSlot"))//taşınan item mod parçası ise hata alınır. SingleTileSlot için koşul sağla
+        else if (onMouseObjectGameObject.GetComponent<ItemSlot>() != null)//taşınan item mod parçası ise hata alınır. SingleTileSlot için koşul sağla
         {
             ItemSlot currentItemSlot = results[0].gameObject.GetComponent<ItemSlot>();
             Item currentItem = currentItemSlot.AssignedItem;
-
+                
             if (currentItem is StorageItem currentStorageItem)
             {
                 Storage currentStorage = currentStorageItem.Storage;
 
-                if (currentStorage.IsExistEmptyTileArea(CurrentMovingItem.AssignedItem.Size))
+                if (currentStorageItem.isAvailable(CurrentMovingItem.AssignedItem))
                 {
-                    CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
-                    CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
-                    currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
+                    if (CurrentMovingItem.AssignedItem is StorageItem storageItem  && storageItem.IsSubItem(currentItemSlot.AssignedItem))
+                    {
+                        RestoreItemSlot(CurrentMovingItem);
+                    }
+                    else
+                    {
+                        if (currentStorage.IsExistEmptyTileArea(CurrentMovingItem.AssignedItem.Size))
+                        {
+                            CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
+                            CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
+                            currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
 
-                    isItemRotated = false;
-                    isItemMoving = false;
-                }
-                else if (currentStorage.IsExistEmptyTileArea(new Vector2Int(CurrentMovingItem.AssignedItem.Size.y, CurrentMovingItem.AssignedItem.Size.x)))
-                {
-                    CurrentMovingItem.AssignedItem.ChangeItemDirection();
-                    CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
-                    CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
-                    currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
+                            isItemRotated = false;
+                            isItemMoving = false;
+                        }
+                        else if (currentStorage.IsExistEmptyTileArea(new Vector2Int(CurrentMovingItem.AssignedItem.Size.y, CurrentMovingItem.AssignedItem.Size.x)))
+                        {
+                            CurrentMovingItem.AssignedItem.ChangeItemDirection();
+                            CurrentMovingItem.ConnectedStorage.RemoveItemSlotFromTileSlots(CurrentMovingItem);
+                            CurrentMovingItem.ConnectedStorage.DeleteItemSlot(CurrentMovingItem);
+                            currentStorage.MoveItem_Auto(CurrentMovingItem.AssignedItem);
                     
-                    isItemRotated = false;
-                    isItemMoving = false;
+                            isItemRotated = false;
+                            isItemMoving = false;
+                        }
+                        else
+                        {
+                            RestoreItemSlot(CurrentMovingItem);
+                        }
+                    }
                 }
                 else
                 {
                     RestoreItemSlot(CurrentMovingItem);
                 }
+               
+                
 
-                if (currentItem == StoragePageCreator.Instance.CurrentItem)
+                if (StoragePageCreator.Instance.storageScreens.Exists(x => x.CurrentItem == currentItem))
                 {
-                    StoragePageCreator.Instance.CurrentInventory.RefreshInventoryPage();
+                    StoragePageCreator.Instance.storageScreens.Find(x => x.CurrentItem == currentItem).CurrentInventory.RefreshInventoryPage();
                 }
             }
             else if (currentItem is WeaponItem currentWeaponItem)
@@ -464,22 +543,23 @@ public class Controller : MonoBehaviour
     /// </summary>
     private void OpenStoragePage(Item item)
     {
-        if (item is StorageItem or BagItem)
-        {
-            StoragePageCreator.Instance.Create(item);
-        }
-
-        if (item is WeaponItem)
-        {
-            WeaponPageCreator.Instance.Create(item);
-        }
-        
-        if (item is ModItem modItem)
-        {
-            if(modItem.SubModItems.Count == 0) return;
-            
-            ModPageCreator.Instance.Create(item);
-        }
+        RightClickMenu.Instance.OpenMenu(item);
+        //if (item is StorageItem or BagItem)
+        //{
+        //    StoragePageCreator.Instance.Create(item);
+        //}
+//
+        //if (item is WeaponItem)
+        //{
+        //    PropertyPageManager.Instance.Create(item);
+        //}
+        //
+        //if (item is ModItem modItem)
+        //{
+        //   // if(modItem.SubModItems.Count == 0) return;
+        //    
+        //    PropertyPageManager.Instance.Create(item);
+        //}
     }
 
     private void RestoreItemSlotVisual(ItemSlot itemSlot, bool? isOverride = null)
@@ -488,7 +568,7 @@ public class Controller : MonoBehaviour
         {
             if (isOverride == true)
             {
-                itemSlot.FitVisual(itemSlot.PivotTileSlot.TileSlot);
+                itemSlot.FitVisualTileSlot(itemSlot.PivotTileSlot.TileSlot);
             }
             else 
             {
@@ -499,7 +579,7 @@ public class Controller : MonoBehaviour
         {
             if (itemSlot.ConnectedStorage == null && itemSlot.ConnectedSingleTileSlot != null)
             {
-                itemSlot.FitVisual(itemSlot.ConnectedSingleTileSlot);
+                itemSlot.FitVisualSingleTileSlot(itemSlot.ConnectedSingleTileSlot);
             }
             else if (itemSlot.ConnectedStorage is Inventory currentInventory)
             {
@@ -507,7 +587,7 @@ public class Controller : MonoBehaviour
             }
             else if (itemSlot.ConnectedStorage is EquipmentStorage currentEquipment)
             {
-                itemSlot.FitVisual(itemSlot.PivotTileSlot.TileSlot);
+                itemSlot.FitVisualTileSlot(itemSlot.PivotTileSlot.TileSlot);
             }
             else
             {

@@ -105,7 +105,7 @@ public class WeaponPageCreator : MonoBehaviour
 
                     itemSlot.AssignedItem = weaponItem.SubModItems[i].ModItem;
                     itemSlot.ConnectToSingleTileSlot(TileSlots[i]);
-                    itemSlot.FitVisual(itemSlot.ConnectedSingleTileSlot);
+                    itemSlot.FitVisualSingleTileSlot(itemSlot.ConnectedSingleTileSlot);
                 }
             }
         }

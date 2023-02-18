@@ -19,7 +19,7 @@ public class PageDragController : MonoBehaviour
     private void Awake()
     {
         m_EventSystem = EventSystem.current;
-        m_Raycaster = FindObjectOfType<GraphicRaycaster>();
+        m_Raycaster = GameObject.FindWithTag("MainCanvas").GetComponent<GraphicRaycaster>();
         m_PointerEventData = new PointerEventData(m_EventSystem);
     }
 

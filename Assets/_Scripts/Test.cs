@@ -11,7 +11,7 @@ public class Test : MonoBehaviour
     void Start()
     {
         //ItemBase = new StorageItem().Construct("chest");
-        ItemBase = Instantiate(ItemDataBase.Instance.Items.Find(x => x.Id == "chest"));
+        //ItemBase = Instantiate(ItemDataBase.Instance.Items.Find(x => x.Id == ""));
     }
 
     // Update is called once per frame

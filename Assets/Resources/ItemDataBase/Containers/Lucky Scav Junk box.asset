@@ -1,0 +1,607 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ee0f1e2e3585854c96e0f5d4b0680b2, type: 3}
+  m_Name: Lucky Scav Junk box
+  m_EditorClassIdentifier: 
+  ItemType: 1
+  Name: Lucky Scav Junk box
+  Id: LuckyScavJunkbox
+  Size: {x: 4, y: 4}
+  Coordinate: {x: 0, y: 0}
+  Sprite: {fileID: 21300000, guid: 6f1afc3d596fa2d42aa7b2c4e78dd79d, type: 3}
+  Direction: 0
+  quantity: 0
+  MaxQuantity: 0
+  ItemWeight: 5000
+  TotalWeight: 0
+  Storage:
+    _tileSize: {x: 12, y: 12}
+    _items: []
+    _tiles:
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 0}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 1}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 2}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 3}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 4}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 5}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 6}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 7}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 8}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 9}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 10}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 0, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 1, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 2, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 3, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 4, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 5, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 6, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 7, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 8, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 9, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 10, y: 11}
+      TileSlot: {fileID: 0}
+    - ConnectedStorage: {fileID: 0}
+      AssignedItem: {fileID: 0}
+      Coordinats: {x: 11, y: 11}
+      TileSlot: {fileID: 0}
+    isStorageUpdated: 0
+  AvailableItems: 0000000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e000000

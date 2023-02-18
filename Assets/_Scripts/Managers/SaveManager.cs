@@ -7,15 +7,30 @@ public class SaveManager : MonoBehaviour
 
     [SerializeField] private Inventory Inventory;
     private const string inventoryId = "inventory";
-
-    [SerializeField] private Inventory Storage;
-    private const string storageId = "storage";
+    
+    [SerializeField] private EquipmentStorage HeadWear;
+    private const string headWearId = "headWear";
+    
+    [SerializeField] private EquipmentStorage BodyArmor;
+    private const string bodyArmorId = "bodyArmor";
 
     [SerializeField] private EquipmentStorage PrimaryWeapon;
     private const string primaryWeaponId = "primaryWeapon";
 
     [SerializeField] private EquipmentStorage SecondaryWeapon;
     private const string secondaryWeaponId = "secondaryWeapon";
+    
+    [SerializeField] private EquipmentStorage Pistol;
+    private const string pistolId = "pistol";
+
+    [SerializeField] private EquipmentStorage Melee;
+    private const string meleeId = "melee";
+    
+    [SerializeField] private EquipmentStorage Rig;
+    private const string rigId = "rig";
+    
+    [SerializeField] private EquipmentStorage BackPack;
+    private const string backpackId = "backpack";
     private void Awake()
     {
         if(LoadOnStart) LoadGame();
@@ -39,9 +54,19 @@ public class SaveManager : MonoBehaviour
     private void SaveGame()
     {
         SaveData<StorageData>(inventoryId, ExportStorage(Inventory.Storage));
-        SaveData<StorageData>(storageId, ExportStorage(Storage.Storage));
+
+        SaveData<StorageData>(headWearId, ExportStorage(HeadWear.Storage));
+        SaveData<StorageData>(bodyArmorId, ExportStorage(BodyArmor.Storage));
+        SaveData<StorageData>(rigId, ExportStorage(Rig.Storage));
+        SaveData<StorageData>(backpackId, ExportStorage(BackPack.Storage));
+        
         SaveData<StorageData>(primaryWeaponId, ExportStorage(PrimaryWeapon.Storage));
         SaveData<StorageData>(secondaryWeaponId, ExportStorage(SecondaryWeapon.Storage));
+        
+        SaveData<StorageData>(pistolId, ExportStorage(Pistol.Storage));
+        SaveData<StorageData>(meleeId, ExportStorage(Melee.Storage));
+
+        
     }
 
     private void LoadGame()
@@ -50,10 +75,24 @@ public class SaveManager : MonoBehaviour
         {
             Inventory.Storage = ImportStorage(LoadData<StorageData>(inventoryId));
         }
-
-        if (PlayerPrefs.HasKey(storageId))
+        
+        if (PlayerPrefs.HasKey(headWearId))
         {
-            Storage.Storage = ImportStorage(LoadData<StorageData>(storageId));
+            HeadWear.Storage = ImportStorage(LoadData<StorageData>(headWearId));
+        }
+        if (PlayerPrefs.HasKey(bodyArmorId))
+        {
+            BodyArmor.Storage = ImportStorage(LoadData<StorageData>(bodyArmorId));
+        }
+        
+        if (PlayerPrefs.HasKey(rigId))
+        {
+            Rig.Storage = ImportStorage(LoadData<StorageData>(rigId));
+        }
+     
+        if (PlayerPrefs.HasKey(backpackId))
+        {
+            BackPack.Storage = ImportStorage(LoadData<StorageData>(backpackId));
         }
 
         if (PlayerPrefs.HasKey(primaryWeaponId))
@@ -65,6 +104,17 @@ public class SaveManager : MonoBehaviour
         {
             SecondaryWeapon.Storage = ImportStorage(LoadData<StorageData>(secondaryWeaponId));
         }
+        
+        if (PlayerPrefs.HasKey(pistolId))
+        {
+            Pistol.Storage = ImportStorage(LoadData<StorageData>(pistolId));
+        }
+
+        if (PlayerPrefs.HasKey(meleeId))
+        {
+            Melee.Storage = ImportStorage(LoadData<StorageData>(meleeId));
+        }
+        
 
     }
 
@@ -186,7 +236,8 @@ public class SaveManager : MonoBehaviour
     private Storage ImportStorage(StorageData storageData)
     {
         Storage storage = new Storage();
-
+        
+        storage.isStorageUpdated = true;
         storage.TileSize = storageData.TileSize;
 
         for (int i = 0; i < storageData.Items.Count; i++)
@@ -202,6 +253,7 @@ public class SaveManager : MonoBehaviour
             {
                 storageItem.Storage = ImportStorage(storageData.Items[i].StorageData);
                 storageItem.Storage.Init();
+                storageItem.Storage.RefreshTileIndexes();
             }
 
             if (item is WeaponItem weaponItem)

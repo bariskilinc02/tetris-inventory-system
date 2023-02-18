@@ -16,10 +16,10 @@ MonoBehaviour:
   Name: Mini Box
   Id: minibox
   Size: {x: 2, y: 2}
-  Coordinat: {x: 0, y: 0}
+  Coordinate: {x: 0, y: 0}
   Sprite: {fileID: 21300000, guid: 70e3ce8ad01f39248a3ea97a35bcf238, type: 3}
   Direction: 0
-  Quantity: 0
+  quantity: 0
   MaxQuantity: 0
   ItemWeight: 0
   TotalWeight: 0
@@ -43,3 +43,5 @@ MonoBehaviour:
       AssignedItem: {fileID: 0}
       Coordinats: {x: 1, y: 1}
       TileSlot: {fileID: 0}
+    isStorageUpdated: 0
+  AvailableItems: 0000000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e000000
